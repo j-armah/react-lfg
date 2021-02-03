@@ -16,17 +16,17 @@ code {
 /* ----------------------- App -------------------------*/
 
 .app {
-  color: white;
+  color: black;
   margin: 0;
   padding: 0; 
   display: grid;
   grid-template-areas: 
-      "nav nav"
-      "main main"
+      "nav"
+      "main"
       ;
       
   grid-template-columns: 4fr;
-  grid-template-rows: 20% 1fr;
+  grid-template-rows: 5% 1fr;
   row-gap: 10px;
   column-gap: 15px;
 
@@ -62,15 +62,55 @@ code {
   grid-gap: 30px;
   padding-top: 10px;
   padding-bottom: 50px;
-  overflow: auto;
+  /* overflow: auto; */
   max-height: 100%;
   max-width: 100%;
   align-items: center;
-  padding-left: 10%;
-  padding-right: 10%;
+  /* padding-left: 10%;
+  padding-right: 10%; */
   
 }
 
+.login {
+  position: absolute;
+  display: block;
+  background: url(https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/9bc27292880429.5e569ff84e4d0.gif);
+  height: 100%;
+  width: 100%;
+}
+
+.games-container {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
+
+.card:hover {
+  transform: scale(1.1); 
+  box-shadow: 0px 10px 36px 2px rgb(15, 3, 58);
+}
+
+.card:active {
+  transform: scale(0.8);
+  box-shadow: 0px 10px 36px 2px rgb(22, 6, 59);
+}
+
+.card {
+  animation-name: load-movie;
+  animation-duration: 1s;
+  transition: transform 1s, box-shadow 0.5s;
+  /* background-color: rgba(48, 47, 61, 0.7); */
+  width: 100%;
+  max-width: 300px;
+}
+
+.card img {
+  width: 100%;
+}
+
+.user-game-detail {
+  grid-area: main;
+}
 
 /* ----------------------- Nav -------------------------*/
 
@@ -80,19 +120,38 @@ code {
 /* ----------------------- GamePage -------------------------*/
 
 .game-page {
-  display: grid;
-  grid-template-areas: 
-  "splash"
-  "cards"
-  ;
+
 }
 
 .game-splash {
   grid-area: splash;
 }
+.game-splash img{
+  height: 50vh;
+  width: 100%;
+}
 
 .user-cards-container {
   grid-area: cards;
+}
+
+/* ----------------------- UserGameDetail -------------------------*/
+
+.user-game-detail {
+
+}
+
+.user-detail {
+
+}
+
+.user-detail img {
+  height: 50vh;
+  width: 50vh;
+}
+
+.user-game-detail {
+  
 }
 
 
