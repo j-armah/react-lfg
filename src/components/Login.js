@@ -24,6 +24,9 @@ function Login({ setCurrentUser, firstGame }) {
 
     return (
         <div className="login">
+            <video autoPlay muted loop>
+                <source src="/Atlias.mp4" type="video/mp4"/>
+            </video>
             <div className="login-form-box">
                 {/* <form className="login-form" onSubmit={handleSubmit}>
                     <h3>Welcome to LFG</h3>

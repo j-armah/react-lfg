@@ -13,10 +13,11 @@ function PlaySessionForm({ closeModal, currentUser, userGame }) {
         event.preventDefault()
 
         const playRequest = {
-            sender_id: 6,
+            sender_id: currentUser.id,
             receiver_id: parseInt(userGame.user.id, 10),
             game_id: parseInt(userGame.game_id, 10),
             is_accepted: false,
+            rejected: false,
             time: dateTime
         }
 

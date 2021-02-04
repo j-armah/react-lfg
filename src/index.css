@@ -14,6 +14,14 @@ code {
 
 
 /* ----------------------- App -------------------------*/
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 
 .app {
   color: black;
@@ -26,7 +34,7 @@ code {
       ;
       
   grid-template-columns: 4fr;
-  grid-template-rows: 5% 1fr;
+  grid-template-rows: 8vh 1fr;
   row-gap: 10px;
   column-gap: 15px;
 
@@ -74,7 +82,7 @@ code {
 .login {
   position: absolute;
   display: block;
-  background: url(https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/9bc27292880429.5e569ff84e4d0.gif);
+  /* background: url(https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/9bc27292880429.5e569ff84e4d0.gif); */
   height: 100%;
   width: 100%;
 }
@@ -136,18 +144,30 @@ code {
 }
 
 /* ----------------------- UserGameDetail -------------------------*/
+.user-game-page {
+  display: grid;
+  grid-template-areas:
+  "usergame-detail userdetail"
+  ;
+  grid-template-columns: 60vw auto;
+}
 
 .user-game-detail {
-
+  grid-area: usergame-detail;
 }
 
 .user-detail {
-
+  grid-area: userdetail;
 }
 
 .user-detail img {
   height: 50vh;
   width: 50vh;
+}
+
+.user-game-img {
+  height: 100%;
+  width: 100%;
 }
 
 .user-game-detail {
@@ -161,7 +181,15 @@ code {
 
 
 /* ----------------------- Login -------------------------*/
-
+.login-form-box {
+  border: 1px solid yellow;
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 20vh;
+  width: 25vw;
+  height: 50vh;
+}
 
 
 

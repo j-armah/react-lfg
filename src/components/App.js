@@ -11,7 +11,7 @@ import UserGameDetail from './UserGameDetail'
 function App() {
   // const [users, setUsers] = useState([])
   const [games, setGames] = useState([])
-  const [currentUser, setCurrentUser] = useState({id: 5})
+  const [currentUser, setCurrentUser] = useState({id: 9})
   const [userGames, setUserGames] = useState([])
 
   function addUserGame(game) {
@@ -33,6 +33,14 @@ function App() {
     .then(newObj => {
       setUserGames([...userGames, newObj])
     })
+  }
+
+  function handleLogin() {
+    console.log("login")
+  }
+
+  function handleLogout() {
+    console.log("logout")
   }
 
   useEffect(() => {
@@ -66,7 +74,7 @@ function App() {
   return (
     <div className="app">
       <Route>
-        <Nav />
+        <Nav currentUser={currentUser} handleLogout={handleLogout} />
       </Route>
       <Switch>
         <Route exact path="/users/:id">

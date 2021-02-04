@@ -42,19 +42,27 @@ function UserGameDetail({ currentUser }) {
 
     if (!isLoaded) return <h2>Loading...</h2>
     return (
-        <div className="user-game-detail">
+        <div className="user-game-page">
             <div className="user-detail">
-                <img src={user.avatar} alt={user.username}/>
-                <p>{user.username}</p>
-                <p></p>
-            </div>
-            <div>
-                game related img detail
+                    <img src={user.avatar} alt={user.username}/>
+                    <p>{user.username}</p>
+                    <div className="modal-button">
+                        <button onClick={openModal}>Let's Game</button>
+                    </div>
             </div>
             <div className="user-game-detail">
-                {userGame.details}
+                <div className="user-game-img-div">
+                    <img className="user-game-img" src="https://i.imgur.com/mjKFM3z.png" alt="placeholder" />
+                </div>
+                <div className="user-game-detail">
+                    Level, Platform, Server
+                    {userGame.details}
+                </div>
+                
+                <div className="user-reviews">
+                    Reviews
+                </div>
             </div>
-            <button onClick={openModal}>Let's Game</button>
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
