@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import ReviewForm from './ReviewForm'
+
 
 function UserShow({ currentUser }) {
     const [isLoaded, setIsLoaded] = useState(false)
@@ -7,6 +9,8 @@ function UserShow({ currentUser }) {
     const [playSessions, setPlaySessions] = useState([])
 
     const params = useParams()
+
+    console.log(currentUser)
 
     function handleAccept(id) {
         console.log(id)
@@ -79,10 +83,12 @@ function UserShow({ currentUser }) {
                 setPlaySessions(filteredSessions)
                 // setIsLoaded(true)
             })
-    }, [])
-    console.log(playSessions)
+    }, [currentUser.id])
+
+    // console.log(user)
 
     if (!isLoaded) return <h2>Loading...</h2>
+    
     return (
         <div className="user-show">
             <div className="user-info">
@@ -98,6 +104,7 @@ function UserShow({ currentUser }) {
             </div>
     {/* Request Area */}
 
+            {currentUser.id !== parseInt(params.id) ? null : 
             <div className="request-feed">
                 <h2>Request Feed</h2>
                 <div className="sent-pending">
@@ -131,7 +138,9 @@ function UserShow({ currentUser }) {
                             return session.sender_id === currentUser.id && session.is_accepted === true
                         }).map(session => {
                             return <div key={session.id}>
-                                {session.receiver.username} requested to play {session.game.name} - {session.time} - {session.is_accepted ? "Accepted" : "Pending"}
+                                {session.receiver.username} accepted {session.game.name} - {session.time} - {session.is_accepted ?  <div className="reviewer-div">
+                <ReviewForm currentUser={currentUser} user={user}/>
+            </div> : "Pending"}
                                 </div>
                         })
                         }
@@ -139,7 +148,9 @@ function UserShow({ currentUser }) {
                             return session.receiver_id === currentUser.id && session.is_accepted === true
                         }).map(session => {
                             return <div key={session.id}>
-                                {session.sender.username} requested to play {session.game.name} - {session.time} - {session.is_accepted ? "Accepted" : "Recieved request"}
+                                {session.sender.username} requested to play {session.game.name} - {session.time} - {session.is_accepted ?  <div className="reviewer-div">
+                <ReviewForm currentUser={currentUser} user={user}/>
+            </div> : "Recieved request"}
                                 </div>
                         })
                         }
@@ -156,10 +167,16 @@ function UserShow({ currentUser }) {
                         }
                     </div>
                 </div>
-            </div>
-
+            </div>}
+            
+           
             <div className="user-show-reviews">
-                Reviews!!!!!!!!!!!!!!!!
+                Reviews
+                {user.reviews_as_reviewee.map(review => {
+                    return <div key={review.id}> 
+                        {review.reviewer.username} | {review.rating} | {review.contents}
+                    </div>
+                })}
             </div>
 
         </div>

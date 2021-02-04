@@ -1,14 +1,39 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-function Login({ setCurrentUser, firstGame }) {
+function Login({ setCurrentUser, firstGame, handleLogin }) {
     const [username, setUsername] = useState("")
-    // const [password, setPassword] = useState("")
+    const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState("")
     const history = useHistory()
 
-    // function handleSubmit(event) {
-    //     event.preventDefault()
-    // }
+    function handleSubmit(e) {
+        e.preventDefault();
+        const formData = { username, password };
+        //console.log(formData)
+    
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            // then set that user in state in our App component
+            console.log(data.user)
+            if (data.user) {
+              handleLogin(data.user)
+              localStorage.setItem("token", data.token)
+            } else {
+              console.log(data)
+              setErrors(data.error)
+              // alert('Incorret username or password')
+            }
+          });
+    }
+
     function login() {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/`, {
             method: "POST",
@@ -28,7 +53,7 @@ function Login({ setCurrentUser, firstGame }) {
                 <source src="/Atlias.mp4" type="video/mp4"/>
             </video>
             <div className="login-form-box">
-                {/* <form className="login-form" onSubmit={handleSubmit}>
+                <form className="login-form" onSubmit={handleSubmit}>
                     <h3>Welcome to LFG</h3>
                     <label htmlFor="username">Username</label>
                     <input
@@ -47,7 +72,7 @@ function Login({ setCurrentUser, firstGame }) {
                     autoComplete="current-password"
                     />
                     <button type="submit" className='submit-button'>Login</button>
-                </form> */}
+                </form>
                 <button onClick={login}>Login</button>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import Modal from 'react-modal'
 import PlaySessionForm from './PlaySessionForm'
 
@@ -45,7 +45,9 @@ function UserGameDetail({ currentUser }) {
         <div className="user-game-page">
             <div className="user-detail">
                     <img src={user.avatar} alt={user.username}/>
-                    <p>{user.username}</p>
+                    <Link to={`/users/${user.id}`}>
+                        <p>{user.username}</p>
+                    </Link>
                     <div className="modal-button">
                         <button onClick={openModal}>Let's Game</button>
                     </div>

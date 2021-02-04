@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, useHistory } from 'react-router-dom'
 import Nav from './Nav'
 import UserShow from './UserShow'
 import GamePage from './GamePage'
@@ -11,8 +11,9 @@ import UserGameDetail from './UserGameDetail'
 function App() {
   // const [users, setUsers] = useState([])
   const [games, setGames] = useState([])
-  const [currentUser, setCurrentUser] = useState({id: 9})
+  const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
+  const history = useHistory()
 
   function addUserGame(game) {
     console.log(game)
@@ -35,13 +36,35 @@ function App() {
     })
   }
 
-  function handleLogin() {
-    console.log("login")
+  function handleLogin(user) {
+    console.log(user)
+    setCurrentUser(user)
+    history.push("/games")
   }
 
   function handleLogout() {
-    console.log("logout")
+    setCurrentUser(null)
+    localStorage.removeItem("token")
+    history.push("/")
   }
+
+  // Auth to keep user logged in after refresh
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/profile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((r) => r.json())
+        .then((user) => {
+          console.log(user)
+          setCurrentUser(user);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/games`)
@@ -71,6 +94,8 @@ function App() {
 
 
   console.log(currentUser)
+  console.log(localStorage.getItem("token"))
+  if (!currentUser) return <h1> Loading !!</h1>
   return (
     <div className="app">
       <Route>
@@ -90,7 +115,7 @@ function App() {
           <UserGameDetail currentUser={currentUser}/>
         </Route>
         <Route exact path="/">
-          <Login setCurrentUser={setCurrentUser} firstGame={games[0]}/>
+          <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>
         </Route>
       </Switch>
     </div>
