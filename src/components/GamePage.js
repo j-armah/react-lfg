@@ -28,7 +28,7 @@ function GamePage() {
                 setUserGames(filteredUserGames)
                 
             })
-    }, [])
+    }, [params.id])
 
     console.log(userGames)
 

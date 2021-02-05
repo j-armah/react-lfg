@@ -51,7 +51,7 @@ function EditUserGameDetail({ userGame, setUserGame }) {
                         ? image
                         : "Set an Image"
                     }
-                    alt="Set a game image"
+                    alt=""
                 />
 
                 <label htmlFor="platform">Platform</label>

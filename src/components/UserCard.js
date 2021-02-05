@@ -9,19 +9,21 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
 function UserCard({ user, userGameId }) {
-    const {id, avatar, username, name} = user
+    const {avatar, username} = user
     return (
         <Grid item xs={3}>
             <Card className="card">
                 <CardActionArea>
                     <Link to={`/user_games/${userGameId}`}>
                         <CardMedia 
-                            
-                            component={"img"} 
-                            style={{ height: "200px" }} 
-                            width="100%" image={avatar} 
-                            title={username}>
-                               
+                            component={"div"} 
+                            style={{ height: "250px" }} 
+                            // width="100%" 
+                            // image={avatar} 
+                            title={username}
+                            className="user-card-img"
+                        >
+                            <img src={avatar} alt={username}/>
                         </CardMedia>
                     </Link>
                 </CardActionArea>

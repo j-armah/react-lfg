@@ -4,7 +4,6 @@ import Modal from 'react-modal';
 import PlaySessionForm from './PlaySessionForm';
 import EditUserGameDetail from './EditUserGameDetail';
 import { Grid, Typography, Button, Box } from '@material-ui/core';
-import { Link as matLink } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper';
 
 Modal.setAppElement('#root')
@@ -17,9 +16,9 @@ function UserGameDetail({ currentUser }) {
     //var subtitle;
     const params = useParams()
 
-    function handleClick() {
-        console.log("clicked")
-    }
+    // function handleClick() {
+    //     console.log("clicked")
+    // }
 
     function openModal() {
         setIsOpen(true);

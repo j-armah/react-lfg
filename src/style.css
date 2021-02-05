@@ -30,6 +30,12 @@ a:hover {
     flex: 1;
 }
 
+.user-card-img img{
+    /* object-fit: fill; */
+    height: 100%;
+    width: 100%;
+}
+
 /* AddGame and GameCard */
 /* 
 .card img{

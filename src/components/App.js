@@ -7,17 +7,17 @@ import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
 import { Grid } from '@material-ui/core'
-import Paper from '@material-ui/core/Paper';
+
 
  
 function App() {
   // const [users, setUsers] = useState([])
-  const [isLoaded, setIsLoaded] = useState(false)
+  // const [isLoaded, setIsLoaded] = useState(false)
   const [games, setGames] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
   const history = useHistory()
-  const location = useLocation()
+  // const location = useLocation()
 
   function addUserGame(game) {
     console.log(game)
@@ -100,7 +100,7 @@ function App() {
   }, [])
 
 
-  console.log(currentUser)
+  // console.log(currentUser)
   // console.log(localStorage.getItem("token"))
   // if (!isLoaded) return <h1>Loading</h1>
   return (
