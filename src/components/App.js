@@ -10,6 +10,7 @@ import UserGameDetail from './UserGameDetail'
  
 function App() {
   // const [users, setUsers] = useState([])
+  const [isLoaded, setIsLoaded] = useState(false)
   const [games, setGames] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
@@ -62,6 +63,7 @@ function App() {
         .then((user) => {
           console.log(user)
           setCurrentUser(user);
+          setIsLoaded(true)
         });
     }
   }, []);
@@ -95,7 +97,7 @@ function App() {
 
   console.log(currentUser)
   console.log(localStorage.getItem("token"))
-  if (!currentUser) return <h1> Loading !!</h1>
+  if (!isLoaded) return <h1>Loading</h1>
   return (
     <div className="app">
       <Route>

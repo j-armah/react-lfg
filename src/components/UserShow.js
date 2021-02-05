@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import EditUserInfo from './EditUserInfo'
 import ReviewForm from './ReviewForm'
 
 
@@ -95,8 +96,14 @@ function UserShow({ currentUser }) {
                 <img className="avatar-pfp" src={user.avatar} alt={user.username}/>
                 <p>
                     {user.username}<br/>
-                    {user.bio}
+                    {user.bio}<br/>
+                    {user.discord}
                 </p>
+
+                {currentUser.id !== parseInt(params.id) ? null :
+                <div className="edit-user-info">
+                    <EditUserInfo user={currentUser} setUser={setUser}/>
+                </div>}
             </div>
             <div className="user-games-played">
                 <h3>Games I play</h3>
@@ -138,21 +145,25 @@ function UserShow({ currentUser }) {
                             return session.sender_id === currentUser.id && session.is_accepted === true
                         }).map(session => {
                             return <div key={session.id}>
-                                {session.receiver.username} accepted {session.game.name} - {session.time} - {session.is_accepted ?  <div className="reviewer-div">
-                <ReviewForm currentUser={currentUser} user={user}/>
-            </div> : "Pending"}
+                                {session.receiver.username} accepted your request {session.game.name} - {session.time} <br/>
+                                Add on discord to start playing! - {session.receiver.discord}
+                                    <div className="reviewer-div">
+                                        <ReviewForm currentUser={currentUser} user={session.receiver}/>
+                                    </div>
                                 </div>
-                        })
+                            })
                         }
                         {playSessions.filter(session => {
                             return session.receiver_id === currentUser.id && session.is_accepted === true
                         }).map(session => {
                             return <div key={session.id}>
-                                {session.sender.username} requested to play {session.game.name} - {session.time} - {session.is_accepted ?  <div className="reviewer-div">
-                <ReviewForm currentUser={currentUser} user={user}/>
-            </div> : "Recieved request"}
+                                You accepted to play {session.game.name} - with {session.sender.username} at {session.time}
+                                Add on discord to start playing! - {session.sender.discord}
+                                    <div className="reviewer-div">
+                                        <ReviewForm currentUser={currentUser} user={session.sender}/>
+                                    </div>
                                 </div>
-                        })
+                            })
                         }
                     </div>
                     <h4> Rejected Request </h4>
@@ -172,7 +183,7 @@ function UserShow({ currentUser }) {
            
             <div className="user-show-reviews">
                 Reviews
-                {user.reviews_as_reviewee.map(review => {
+                {currentUser.reviews_as_reviewee.map(review => {
                     return <div key={review.id}> 
                         {review.reviewer.username} | {review.rating} | {review.contents}
                     </div>

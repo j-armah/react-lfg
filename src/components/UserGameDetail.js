@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Modal from 'react-modal'
 import PlaySessionForm from './PlaySessionForm'
+import EditUserGameDetail from './EditUserGameDetail'
 
 Modal.setAppElement('#root')
 
@@ -10,7 +11,7 @@ function UserGameDetail({ currentUser }) {
     const [userGame, setUserGame] = useState(null)
     const [user, setUser] = useState(null)
     const [modalIsOpen, setIsOpen] = React.useState(false);
-    var subtitle;
+    //var subtitle;
     const params = useParams()
 
     function handleClick() {
@@ -27,7 +28,7 @@ function UserGameDetail({ currentUser }) {
     }
 
     function closeModal(){
-    setIsOpen(false);
+        setIsOpen(false);
     }
 
     useEffect(() => {
@@ -35,8 +36,15 @@ function UserGameDetail({ currentUser }) {
             .then(resp => resp.json())
             .then(data => {
                 setUserGame(data)
-                setUser(data.user)
-                setIsLoaded(true)
+                //setUser(data.user)
+                
+                fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${data.user.id}`)
+                    .then(resp => resp.json())
+                    .then(userr => {
+                        console.log(userr)
+                        setUser(userr)
+                        setIsLoaded(true)
+                    })
             })
     }, [params.id])
 
@@ -48,21 +56,36 @@ function UserGameDetail({ currentUser }) {
                     <Link to={`/users/${user.id}`}>
                         <p>{user.username}</p>
                     </Link>
+
+                    {currentUser.id === userGame.user.id ? 
+                    <div>
+                        <EditUserGameDetail userGame={userGame} setUserGame={setUserGame}/>
+                    </div>
+                    :
                     <div className="modal-button">
                         <button onClick={openModal}>Let's Game</button>
-                    </div>
+                    </div>}
             </div>
             <div className="user-game-detail">
                 <div className="user-game-img-div">
-                    <img className="user-game-img" src="https://i.imgur.com/mjKFM3z.png" alt="placeholder" />
+                    <img className="user-game-img" src={userGame.image} alt="placeholder" />
                 </div>
                 <div className="user-game-detail">
-                    Level, Platform, Server
+                    
+                    {userGame.level}<br/>
+                    {userGame.platform}<br/>
+                    {userGame.server}<br/>
                     {userGame.details}
                 </div>
                 
                 <div className="user-reviews">
                     Reviews
+                    {user.reviews_as_reviewee.map(review => {
+                        return <div key={review.id}>
+                            {review.rating} | {review.reviewer.username}
+                            <p>{review.contents}</p>
+                        </div>
+                    })}
                 </div>
             </div>
             <Modal
