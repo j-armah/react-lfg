@@ -1,5 +1,6 @@
 import React from 'react'
 import GameCard from './GameCard'
+import { Grid } from '@material-ui/core'
 
 function AddGame({ games, newUserGame }) {
 
@@ -7,9 +8,9 @@ function AddGame({ games, newUserGame }) {
         <GameCard key={game.id} game={game} newUserGame={newUserGame}/>    
     )
     return (
-        <div className="games-container">
-            {gameArray}
-        </div>
+        <Grid container spacing={2} className="games-container">
+                {gameArray}
+        </Grid>
     )
 }
 

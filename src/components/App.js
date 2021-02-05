@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Switch, useHistory } from 'react-router-dom'
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import Nav from './Nav'
 import UserShow from './UserShow'
 import GamePage from './GamePage'
 import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
+import { Grid } from '@material-ui/core'
 
  
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
   const history = useHistory()
+  const location = useLocation()
 
   function addUserGame(game) {
     console.log(game)
@@ -61,7 +63,7 @@ function App() {
       })
         .then((r) => r.json())
         .then((user) => {
-          console.log(user)
+          // console.log(user)
           setCurrentUser(user);
           setIsLoaded(true)
         });
@@ -74,6 +76,8 @@ function App() {
       .then(data => {
         // console.log(data)
         setGames(data)
+
+
       })
   }, [])
 
@@ -96,31 +100,40 @@ function App() {
 
 
   console.log(currentUser)
-  console.log(localStorage.getItem("token"))
+  // console.log(localStorage.getItem("token"))
   if (!isLoaded) return <h1>Loading</h1>
   return (
-    <div className="app">
-      <Route>
-        <Nav currentUser={currentUser} handleLogout={handleLogout} />
-      </Route>
+    <Grid className="app" container direction="column">
+      <Grid item>
+        <Route>
+          <Nav currentUser={currentUser} handleLogout={handleLogout} />
+        </Route>
+      </Grid>
+      
       <Switch>
-        <Route exact path="/users/:id">
-          <UserShow currentUser={currentUser}/> 
-        </Route>
-        <Route exact path="/games/:id">
-            <GamePage />
-        </Route>
-        <Route exact path="/games">
-          <AddGame games={games} newUserGame={addUserGame}/>
-        </Route>
-        <Route exact path="/user_games/:id">
-          <UserGameDetail currentUser={currentUser}/>
-        </Route>
-        <Route exact path="/">
-          <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>
-        </Route>
+        <Grid item container>
+          <Grid item xs={false} sm={1} />
+            <Grid item xs={12} sm={10}>
+              <Route exact path="/users/:id">
+                <UserShow currentUser={currentUser} /> 
+              </Route>
+              <Route exact path="/games/:id">
+                  <GamePage />
+              </Route>
+              <Route exact path="/games">
+                <AddGame games={games} newUserGame={addUserGame}/>
+              </Route>
+              <Route exact path="/user_games/:id">
+                <UserGameDetail currentUser={currentUser}/>
+              </Route>
+              <Route exact path="/">
+                <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>
+              </Route>
+            </Grid>
+          <Grid item xs={false} sm={1} />
+        </Grid>
       </Switch>
-    </div>
+    </Grid>
   );
 }
 

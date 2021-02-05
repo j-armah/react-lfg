@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Button } from '@material-ui/core'
 
 function Login({ setCurrentUser, firstGame, handleLogin }) {
     const [username, setUsername] = useState("")
@@ -71,8 +72,9 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="current-password"
                     />
-                    <button type="submit" className='submit-button'>Login</button>
+                    <Button type="submit" className='submit-button'>Login</Button>
                 </form>
+                <Button> Login </Button>
                 <button onClick={login}>Login</button>
             </div>
         </div>

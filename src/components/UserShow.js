@@ -84,7 +84,7 @@ function UserShow({ currentUser }) {
                 setPlaySessions(filteredSessions)
                 // setIsLoaded(true)
             })
-    }, [currentUser.id])
+    }, [])
 
     // console.log(user)
 

@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+
+}
+
+
+/*  NavBar */
+
+.nav a{
+    color: white;
+    text-decoration: none;
+}
+
+.user-nav-div {
+    
+}
+
+.nav-games{
+    flex: 1;
+}
+
+/* AddGame and GameCard */
+/* 
+.card img{
+    height: 100%;
+    width: 100%;
+} */
+
+.add-game-btn b{
+    color: white;
+    position: relative;
+}
+
+
+.poster {
+    height: 200px;
+}
+
+
+.card:hover {
+    transform: scale(1.1); 
+    /* box-shadow: 0px 10px 36px 2px rgb(15, 3, 58); */
+}
+
+.card:active {
+    transform: scale(0.8);
+    /* box-shadow: 0px 10px 36px 2px rgb(22, 6, 59); */
+}
+
+.card {
+    animation-name: load-movie;
+    animation-duration: 2s;
+    transition: transform 2s, box-shadow 0.5s;
+}
