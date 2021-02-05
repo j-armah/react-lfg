@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import UserCard from './UserCard'
+import { Grid } from '@material-ui/core'
 
 function GamePage() {
     const [isLoaded, setIsLoaded] = useState(false)
@@ -34,17 +35,17 @@ function GamePage() {
     if (!isLoaded) return <h2>Loading...</h2>
     
     return (
-        <div className="game-page">
-            <div className="game-splash">
+        <Grid className="game-page" >
+            <Grid item className="game-splash">
                 {game.name}
                 <img src={game.splash} alt={game.name} />
-            </div>
-            <div className="users-library">
+            </Grid>
+            <Grid container spacing={3} className="users-library">
                 {userGames.map(userGame => 
                     <UserCard key={userGame.id} user={userGame.user} userGameId={userGame.id}/>    
                 )}
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     )
 }
 

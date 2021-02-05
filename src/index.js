@@ -2,18 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from "@material-ui/core/CssBaseline";
 // import './index.css';
 import './style.css'
 import App from './components/App';
-import theme from './theme.js'
+import rawTheme from './theme.json'
 // import reportWebVitals from './reportWebVitals';
 
+const theme = createMuiTheme(rawTheme);
+
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline />
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </ThemeProvider>,
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
 

@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import Modal from 'react-modal'
-import PlaySessionForm from './PlaySessionForm'
-import EditUserGameDetail from './EditUserGameDetail'
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import Modal from 'react-modal';
+import PlaySessionForm from './PlaySessionForm';
+import EditUserGameDetail from './EditUserGameDetail';
+import { Grid, Typography, Button, Box } from '@material-ui/core';
+import { Link as matLink } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper';
 
 Modal.setAppElement('#root')
 
@@ -43,6 +46,7 @@ function UserGameDetail({ currentUser }) {
                     .then(userr => {
                         console.log(userr)
                         setUser(userr)
+                        
                         setIsLoaded(true)
                     })
             })
@@ -50,44 +54,61 @@ function UserGameDetail({ currentUser }) {
 
     if (!isLoaded) return <h2>Loading...</h2>
     return (
-        <div className="user-game-page">
-            <div className="user-detail">
-                    <img src={user.avatar} alt={user.username}/>
-                    <Link to={`/users/${user.id}`}>
-                        <p>{user.username}</p>
-                    </Link>
+        <Grid container spacing={4} className="user-game-page" component={"div"}>
+            <Grid item xs={8} container spacing={2} className="user-game-detail">
+                <Grid item xs={12} >
+                    <div className="user-game-img-div">
+                        <img height="100%" width="100%" className="user-game-img" src={userGame.image} alt="placeholder" />
+                    </div>
+                </Grid>
+                <Grid item xs={12} className="user-game-detail" component={"div"}>
+                    <Typography paragraph variant={"h4"}> Details </Typography>
+                    <Paper>
+                        <Box p={2} m={1}>
+                            <Typography paragraph > Level: {userGame.level} </Typography>
+                            <Typography paragraph > Platform: {userGame.platform} </Typography>
+                            <Typography paragraph > Server: {userGame.server} </Typography>
+                            <Typography paragraph > {userGame.details} </Typography>
+                        </Box>
+                    </Paper>
+                </Grid>
+                
+                <Grid item xs={12} className="user-reviews" component={"div"}>
+                    <Typography variant={"h4"}>
+                        Comments
+                    </Typography>
+                    {user.reviews_as_reviewee.map(review => {
+                        return <Paper key={review.id}>
+                            <Box p={2} m={1}>
+                                <Typography paragraph>{review.rating} | {review.reviewer.username}</Typography>
+                                <Typography paragraph>{review.contents}</Typography>
+                            </Box>
+                        </Paper>
+                    })}
+                </Grid>
+            </Grid>
+            <Grid item xs={4} component={"div"} className="user-detail">
+                    <img height="50%" width="100%" src={user.avatar} alt={user.username}/>
+                     
+                        <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
+                            <Typography variant={"h3"}>{user.username}</Typography>
+                        </Link>
+                    
+                    
 
-                    {currentUser.id === userGame.user.id ? 
+                    {!currentUser ? 
+                    null  
+                    : currentUser.id === userGame.user.id ? 
                     <div>
                         <EditUserGameDetail userGame={userGame} setUserGame={setUserGame}/>
                     </div>
                     :
                     <div className="modal-button">
-                        <button onClick={openModal}>Let's Game</button>
+                        {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
+                        <Button onClick={openModal}>Let's Game</Button>
                     </div>}
-            </div>
-            <div className="user-game-detail">
-                <div className="user-game-img-div">
-                    <img className="user-game-img" src={userGame.image} alt="placeholder" />
-                </div>
-                <div className="user-game-detail">
-                    
-                    {userGame.level}<br/>
-                    {userGame.platform}<br/>
-                    {userGame.server}<br/>
-                    {userGame.details}
-                </div>
-                
-                <div className="user-reviews">
-                    Reviews
-                    {user.reviews_as_reviewee.map(review => {
-                        return <div key={review.id}>
-                            {review.rating} | {review.reviewer.username}
-                            <p>{review.contents}</p>
-                        </div>
-                    })}
-                </div>
-            </div>
+            </Grid>
+            
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
@@ -98,7 +119,7 @@ function UserGameDetail({ currentUser }) {
 
                 <PlaySessionForm closeModal={closeModal} currentUser={currentUser} userGame={userGame} />
             </Modal>
-        </div>
+        </Grid>
     )
 }
 

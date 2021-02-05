@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import EditUserInfo from './EditUserInfo'
 import ReviewForm from './ReviewForm'
+import GameCard from './GameCard'
+import { Grid, Typography, Button, Box, Card } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 
 
 function UserShow({ currentUser }) {
@@ -78,10 +85,11 @@ function UserShow({ currentUser }) {
             .then(resp => resp.json())
             .then(data => {
                 console.log(data)
-                const filteredSessions = data.filter(session => {
-                    return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
-                })
-                setPlaySessions(filteredSessions)
+                // const filteredSessions = data.filter(session => {
+                //     return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                
+                // })  
+                setPlaySessions(data)
                 // setIsLoaded(true)
             })
     }, [])
@@ -91,106 +99,154 @@ function UserShow({ currentUser }) {
     if (!isLoaded) return <h2>Loading...</h2>
     
     return (
-        <div className="user-show">
-            <div className="user-info">
-                <img className="avatar-pfp" src={user.avatar} alt={user.username}/>
-                <p>
-                    {user.username}<br/>
-                    {user.bio}<br/>
-                    {user.discord}
-                </p>
+        <Grid container spacing={2} className="user-show">
+            <Grid container item xs={6} className="user-info" component={"div"}>
+                <Grid item xs={8}>
+                    <Card>
+                        <CardMedia
+                            component={"img"} 
+                            style={{ height: "400px" }} 
+                            width="100%" image={user.avatar} 
+                            title={user.username}>
+                        </CardMedia>
+                        <CardContent>
+                            {user.username}<br/>
+                            {user.bio}<br/>
+                            {user.discord}
+                        </CardContent>
 
-                {currentUser.id !== parseInt(params.id) ? null :
-                <div className="edit-user-info">
-                    <EditUserInfo user={currentUser} setUser={setUser}/>
-                </div>}
-            </div>
-            <div className="user-games-played">
-                <h3>Games I play</h3>
-                {user.games.map(game => <li key={game.id}>{game.name}</li>)}
-            </div>
-    {/* Request Area */}
-
-            {currentUser.id !== parseInt(params.id) ? null : 
-            <div className="request-feed">
-                <h2>Request Feed</h2>
-                <div className="sent-pending">
-                <h4> Sent </h4>
-                    {playSessions.filter(session => {
-                        return session.sender_id === currentUser.id && session.is_accepted === false && session.rejected === false
-                    }).map(session => {
-                        return <div key={session.id}>
-                            {session.receiver.username} - {session.time} - {session.is_accepted ? "Accepted" : "Pending"}
-                            </div>
-                    })
-                    }
-                </div>
-                <div className="received-pending">
-                <h4> Recieved </h4>
-                    {playSessions.filter(session => {
-                        return session.receiver_id === currentUser.id && session.is_accepted === false && session.rejected === false
-                    }).map(session => {
-                        return <div key={session.id}>
-                            {session.sender.username} requested to play {session.game.name} - {session.time} - {session.is_accepted ? "Accepted" : "Recieved request"}
-                            <button onClick={() => handleAccept(session.id)}> Accept Request </button>
-                            <button onClick={() => handleReject(session.id)}> Reject Request </button>
-                            </div>
-                    })
-                    }
-                </div>
-                <div className="actioned-request-div">
-                    <h4> Accepted Request</h4>
-                    <div className="accepted-sent">
+                    </Card>
+                {/* <img width="50%" height="300px" className="avatar-pfp" src={user.avatar} alt={user.username}/> */}
+                </Grid>
+                
+                <Grid item xs={12} className="user-show-reviews">
+                <Typography variant={"h4"} paragraph>Reviews</Typography>
+                {user.reviews_as_reviewee.map(review => {
+                    return <Paper key={review.id}>
+                        <Box p={2} m={1}>
+                            <Typography paragraph>{review.rating} | {review.reviewer.username}</Typography>
+                            <Typography paragraph>{review.contents}</Typography>
+                        </Box>
+                        
+                    </Paper>
+                })}
+                </Grid>
+            </Grid>
+            <Grid container spacing={4} item xs={6} className="user-games-played">
+                <Grid item xs={12} height={"10px"} component={"div"} className="other-games">
+                    <Typography variant={"h4"}>Other Games</Typography>
+                </Grid>
+                <Grid container item xs={12} spacing={2} className="other-game-cards">
+                    {user.games.map(game => <GameCard key={game.id} game={game}/>)}
+                </Grid>
+                {/* REQUEST AREA */}
+                {!currentUser ? 
+                null
+                : currentUser.id !== parseInt(params.id) ? null : 
+                <Grid item xs={12} className="request-feed">
+                    <Typography variant={"h4"} paragraph>Request Feed</Typography>
+                    <div className="sent-pending">
+                    <Typography variant={"h5"} paragraph> Sent </Typography>
                         {playSessions.filter(session => {
-                            return session.sender_id === currentUser.id && session.is_accepted === true
+                            return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                        }).filter(session => {
+                            return session.sender_id === currentUser.id && session.is_accepted === false && session.rejected === false
                         }).map(session => {
-                            return <div key={session.id}>
-                                {session.receiver.username} accepted your request {session.game.name} - {session.time} <br/>
-                                Add on discord to start playing! - {session.receiver.discord}
-                                    <div className="reviewer-div">
-                                        <ReviewForm currentUser={currentUser} user={session.receiver}/>
-                                    </div>
-                                </div>
-                            })
-                        }
-                        {playSessions.filter(session => {
-                            return session.receiver_id === currentUser.id && session.is_accepted === true
-                        }).map(session => {
-                            return <div key={session.id}>
-                                You accepted to play {session.game.name} - with {session.sender.username} at {session.time}
-                                Add on discord to start playing! - {session.sender.discord}
-                                    <div className="reviewer-div">
-                                        <ReviewForm currentUser={currentUser} user={session.sender}/>
-                                    </div>
-                                </div>
-                            })
-                        }
-                    </div>
-                    <h4> Rejected Request </h4>
-                    <div className="rejected-req">
-                        {playSessions.filter(session => {
-                            return session.sender_id === currentUser.id && session.rejected === true
-                        }).map(session => {
-                            return <div key={session.id}>
-                                {session.receiver.username} rejected your request sad face {session.game.name} - {session.time}
-                                </div>
+                            return <Paper key={session.id}>
+                                <Box p={2} m={1}>
+                                    <Typography>
+                                        {session.receiver.username} - {session.time} - {session.is_accepted ? "Accepted" : "Pending"}
+                                    </Typography>
+                                </Box>
+                            </Paper>
                         })
                         }
                     </div>
-                </div>
+                    <div className="received-pending">
+                    <Typography variant={"h5"} paragraph> Recieved </Typography>
+                        {playSessions.filter(session => {
+                            return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                        }).filter(session => {
+                            return session.receiver_id === currentUser.id && session.is_accepted === false && session.rejected === false
+                        }).map(session => {
+                            return <Paper key={session.id}>
+                                {session.sender.username} requested to play {session.game.name} - {session.time} - {session.is_accepted ? "Accepted" : "Recieved request"}
+                                <button onClick={() => handleAccept(session.id)}> Accept Request </button>
+                                <button onClick={() => handleReject(session.id)}> Reject Request </button>
+                                </Paper>
+                        })
+                        }
+                    </div>
+                    <div className="actioned-request-div">
+                    <Typography variant={"h5"} paragraph> Accepted Request </Typography>
+                        <div className="accepted-sent">
+                            {playSessions.filter(session => {
+                                return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                            }).filter(session => {
+                                return session.sender_id === currentUser.id && session.is_accepted === true
+                            }).map(session => {
+                                return <Paper key={session.id}>
+                                        <Box p={2} m={1}>
+                                            <Typography>
+                                                {session.receiver.username} accepted your request {session.game.name} - {session.time} <br/>
+                                                Add on discord to start playing! - {session.receiver.discord}
+                                            </Typography>
+                                            
+                                            <div className="reviewer-div">
+                                                <ReviewForm currentUser={currentUser} user={session.receiver}/>
+                                            </div>
+                                        </Box>
+                                    </Paper>
+                                })
+                            }
+                            {playSessions.filter(session => {
+                                return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                            }).filter(session => {
+                                return session.receiver_id === currentUser.id && session.is_accepted === true
+                            }).map(session => {
+                                return <Paper key={session.id}>
+                                        <Box p={2} m={1}>
+                                        <Typography>
+                                            You accepted to play {session.game.name} - with {session.sender.username} at {session.time}
+                                            Add on discord to start playing! - {session.sender.discord}
+                                        </Typography>
+                                        <div className="reviewer-div">
+                                            <ReviewForm currentUser={currentUser} user={session.sender}/>
+                                        </div>
+                                        </Box>
+                                    </Paper>
+                                })
+                            }
+                        </div>
+                        <Typography variant={"h5"}> Rejected Request </Typography>
+                        <div className="rejected-req">
+                            {playSessions.filter(session => {
+                                return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                            }).filter(session => {
+                                return session.sender_id === currentUser.id && session.rejected === true
+                            }).map(session => {
+                                return <Paper key={session.id}>
+                                    <Box p={2} m={1}>
+                                        <Typography>
+                                            {session.receiver.username} rejected your request sad face {session.game.name} - {session.time}
+                                        </Typography>
+                                    </Box>
+                                </Paper>
+                            })
+                            }
+                        </div>
+                    </div>
+                </Grid>}
+            </Grid>        
+            {!currentUser ? 
+                null
+                : currentUser.id !== parseInt(params.id) ? null :
+                <div className="edit-user-info">
+                    <EditUserInfo user={currentUser} setUser={setUser}/>
             </div>}
             
-           
-            <div className="user-show-reviews">
-                Reviews
-                {currentUser.reviews_as_reviewee.map(review => {
-                    return <div key={review.id}> 
-                        {review.reviewer.username} | {review.rating} | {review.contents}
-                    </div>
-                })}
-            </div>
 
-        </div>
+        </Grid>
     )
 }
 

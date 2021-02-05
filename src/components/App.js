@@ -7,6 +7,7 @@ import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
 import { Grid } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper';
 
  
 function App() {
@@ -65,7 +66,7 @@ function App() {
         .then((user) => {
           // console.log(user)
           setCurrentUser(user);
-          setIsLoaded(true)
+          // setIsLoaded(true)
         });
     }
   }, []);
@@ -101,7 +102,7 @@ function App() {
 
   console.log(currentUser)
   // console.log(localStorage.getItem("token"))
-  if (!isLoaded) return <h1>Loading</h1>
+  // if (!isLoaded) return <h1>Loading</h1>
   return (
     <Grid className="app" container direction="column">
       <Grid item>
@@ -132,6 +133,7 @@ function App() {
             </Grid>
           <Grid item xs={false} sm={1} />
         </Grid>
+
       </Switch>
     </Grid>
   );

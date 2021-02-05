@@ -9,22 +9,28 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
 function GameCard({ game, newUserGame }) {
-    const {id, name, genre, image} =  game
+    const {id, name, image} =  game
 
     function handleClick() {
         newUserGame(game)
     }
 
     return (
-        <Grid item xs={3}>
+        <Grid item xs={4}>
             <Card className="card">
             <CardActionArea>
                 <Link to={`/games/${id}`}>
-                    <CardMedia style={{height: "200px"}} image={image} title={name}>
-                        <Button onClick={handleClick} className="add-game-btn"> Add Game </Button>
+                    <CardMedia
+                        component={"img"}
+                        width="100%"
+                        className="game-card-img"
+                        style={{height: "200px"}} 
+                        image={image} 
+                        title={name}>
                     </CardMedia>
                 </Link>
             </CardActionArea>
+            {/* <Button onClick={handleClick} className="add-game-btn"> Add Game </Button> */}
             </Card>
         </Grid>
     )

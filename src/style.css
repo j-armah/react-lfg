@@ -3,8 +3,19 @@ body {
 
 }
 
+a:visited {
+    color: white;
+}
+
+a:hover {
+    color: #3B4B5B;
+}
 
 /*  NavBar */
+
+.nav {
+    margin-bottom: 50px;
+}
 
 .nav a{
     color: white;
@@ -36,19 +47,39 @@ body {
     height: 200px;
 }
 
+.game-card-img {
+    object-fit: cover;
+}
 
-.card:hover {
+
+/* .card:hover {
     transform: scale(1.1); 
-    /* box-shadow: 0px 10px 36px 2px rgb(15, 3, 58); */
+    box-shadow: 0px 10px 36px 2px rgb(15, 3, 58);
 }
 
 .card:active {
     transform: scale(0.8);
-    /* box-shadow: 0px 10px 36px 2px rgb(22, 6, 59); */
-}
+    box-shadow: 0px 10px 36px 2px rgb(22, 6, 59);
+} */
 
 .card {
     animation-name: load-movie;
     animation-duration: 2s;
     transition: transform 2s, box-shadow 0.5s;
 }
+
+/*  Game Page */
+
+.game-splash img{
+    height: 50vh;
+    width: 100%;
+}
+
+
+/* UserGameDetail And UserShow */
+
+.other-games{
+    height: 50px;
+    margin-bottom: -20px;
+}
+
