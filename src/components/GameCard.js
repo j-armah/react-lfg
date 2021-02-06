@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Card from '@material-ui/core/Card'
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
@@ -10,25 +10,32 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 
 function GameCard({ game, newUserGame }) {
     const {id, name, image} =  game
-
+    const location = useLocation()
+    // console.log(location.pathname === "/games")
+    
     function handleClick() {
         newUserGame(game)
     }
 
     return (
         <Grid item xs={4}>
-            <Card className="card">
-            <CardActionArea>
+            <Card className="card" component={"div"}>
+            <CardActionArea component={"div"}>
                 <Link to={`/games/${id}`}>
                     <CardMedia
-                        component={"img"}
-                        width="100%"
+                        component={"div"}
                         className="game-card-img"
                         style={{height: "200px"}} 
-                        image={image} 
+                        // image={image} 
                         title={name}>
+                            <img src={image} alt={name}/>
+                            
                     </CardMedia>
+                    
                 </Link>
+                {location.pathname !== "/games" ? null :
+                    <Button onClick={handleClick}> Add Game </Button>
+                }
             </CardActionArea>
             {/* <Button onClick={handleClick} className="add-game-btn"> Add Game </Button> */}
             </Card>

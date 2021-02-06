@@ -1,4 +1,21 @@
 import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles';
+import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: '25ch',
+    },
+    label: {
+        margin: theme.spacing(2),
+    }
+}));
 
 function EditUserGameDetail({ userGame, setUserGame }) {
     const [details, setDetails] = useState(userGame.details)
@@ -6,6 +23,8 @@ function EditUserGameDetail({ userGame, setUserGame }) {
     const [level, setLevel] = useState(userGame.level)
     const [server, setServer] = useState(userGame.server)
     const [image, setImage] = useState(userGame.image)
+    const classes = useStyles()
+
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -33,18 +52,9 @@ function EditUserGameDetail({ userGame, setUserGame }) {
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h1>Edit Game Info</h1>
-
-                <label htmlFor="image">Game Image</label>
-                <input
-                    type="text"
-                    id="image"
-                    autoComplete="off"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                />
+        <div className={classes.root}>
+            <FormControl onSubmit={handleSubmit}>
+                <Typography variant={"h4"}>Edit Game Info</Typography>
                 <img height="100px"
                     src={
                     image
@@ -54,20 +64,53 @@ function EditUserGameDetail({ userGame, setUserGame }) {
                     alt=""
                 />
 
-                <label htmlFor="platform">Platform</label>
-                <input type="text" value={platform} onChange={(e) => setPlatform(e.target.value)}/>
+                <FormLabel htmlFor="image">Game Image</FormLabel>
+                <TextField
+                    label="URL"
+                    id="outlined-secondary" 
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    className={classes.textField}
+                    type="text"
+                    id="image"
+                    autoComplete="off"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                />
 
-                <label htmlFor="level">Level</label>
-                <input type="text" value={level} onChange={(e) => setLevel(e.target.value)}/>
+                <FormLabel htmlFor="platform">Platform</FormLabel>
+                <TextField
+                    label="Name"
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    className={classes.textField}
+                    type="text" value={platform} onChange={(e) => setPlatform(e.target.value)}/>
 
-                <label htmlFor="server">Server</label>
-                <input type="text" value={server} onChange={(e) => setServer(e.target.value)}/>
+                <FormLabel htmlFor="level">Level</FormLabel>
+                <TextField
+                    label="Name"
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense" 
+                    className={classes.textField}
+                    type="text" value={level} onChange={(e) => setLevel(e.target.value)}/>
 
-                <label htmlFor="details">Intro</label>
+                <FormLabel htmlFor="server">Server</FormLabel>
+                <TextField
+                    label="Name"
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    className={classes.textField}
+                    type="text" value={server} onChange={(e) => setServer(e.target.value)}/>
+
+                <FormLabel htmlFor="details">Intro</FormLabel>
                 <textarea id="details" value={details} onChange={(e) => setDetails(e.target.value)} />
 
-                <input type="submit" value="Update" />
-            </form>
+                <Button color="secondary" variant="contained" onClick={handleSubmit} > Update</Button>
+            </FormControl>
         </div>
     )
 }

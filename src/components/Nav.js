@@ -34,7 +34,7 @@ function Nav({ currentUser, handleLogout}) {
                                 <NavLink exact to={`/users/${currentUser.id}`} className="nav-button">
                                     Welcome, {currentUser.username}!
                                 </NavLink>
-                                <Button color="secondary" className="nav-button" onClick={handleLogout}>Logout</Button>
+                                <Button color="secondary" variant="contained" className="nav-button" onClick={handleLogout}>Logout</Button>
                             </div>
                         </div>} 
                 </Typography>

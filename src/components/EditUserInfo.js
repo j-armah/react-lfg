@@ -1,4 +1,21 @@
 import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles';
+import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: '25ch',
+    },
+    label: {
+        margin: theme.spacing(2),
+    }
+}));
 
 function EditUserInfo({ user, setUser }) {
     // const {username, name, avatar, bio, discord} = user
@@ -7,6 +24,8 @@ function EditUserInfo({ user, setUser }) {
     const [avatar, setAvatar] = useState(user.avatar)
     const [bio, setBio] = useState(user.bio)
     const [discord, setDiscord] = useState(user.discord)
+    const classes = useStyles()
+    
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -18,7 +37,8 @@ function EditUserInfo({ user, setUser }) {
             bio: bio,
             discord: discord
         }
-
+        
+        console.log(newUserInfo)
         fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${user.id}`, {
             method: 'PATCH',
             headers: {
@@ -34,19 +54,13 @@ function EditUserInfo({ user, setUser }) {
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h1>Edit Profile</h1>
+        <div className={classes.root}>
+            <FormControl onSubmit={handleSubmit}>
+                <Typography variant={"h4"}>Edit Profile</Typography>
 
-                <label htmlFor="avatar">Profile Picture</label>
-                <input
-                    type="text"
-                    id="avatar"
-                    autoComplete="off"
-                    value={avatar}
-                    onChange={(e) => setAvatar(e.target.value)}
-                />
+                <FormLabel  htmlFor="avatar">Profile Picture Url</FormLabel>
                 <img height="100px"
+                    className={classes.label}
                     src={
                     avatar.length
                         ? avatar
@@ -55,20 +69,53 @@ function EditUserInfo({ user, setUser }) {
                     alt={username}
                 />
 
-                <label htmlFor="name">Edit Name</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                <TextField
+                    label="URL"
+                    id="outlined-secondary" 
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    className={classes.textField}
+                    type="text"
+                    id="avatar"
+                    autoComplete="off"
+                    value={avatar}
+                    onChange={(e) => setAvatar(e.target.value)}
+                />
 
-                <label htmlFor="username">Edit Username</label>
-                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <FormLabel className={classes.label} htmlFor="name">Edit Name</FormLabel>
+                <TextField 
+                    label="Name"
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    fullWidth
+                    className={classes.textField}
+                    type="text" value={name} onChange={(e) => setName(e.target.value)}/>
 
-                <label htmlFor="name">Edit Discord</label>
-                <input type="text" value={discord} onChange={(e) => setDiscord(e.target.value)}/>
+                <FormLabel className={classes.label} htmlFor="username">Edit Username</FormLabel>
+                <TextField
+                    label="Username" 
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    className={classes.textField}
+                    type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
 
-                <label htmlFor="bio">Bio</label>
-                <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} />
+                <FormLabel className={classes.label} htmlFor="name">Edit Discord</FormLabel>
+                <TextField
+                    label="Discord"
+                    variant="outlined"
+                    color="secondary"
+                    lavel="dense"
+                    className={classes.textField} 
+                    type="text" value={discord} onChange={(e) => setDiscord(e.target.value)}/>
 
-                <input type="submit" value="Update" />
-            </form>
+                <FormLabel className={classes.label} htmlFor="bio">Bio</FormLabel>
+                <TextareaAutosize rowsMin={5} id="bio" value={bio} onChange={(e) => setBio(e.target.value)} />
+                <br/>
+                <Button color="secondary" variant="contained" onClick={handleSubmit} > Update</Button>
+            </FormControl>
         </div>
     )
 }

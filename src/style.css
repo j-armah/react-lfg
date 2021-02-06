@@ -37,11 +37,7 @@ a:hover {
 }
 
 /* AddGame and GameCard */
-/* 
-.card img{
-    height: 100%;
-    width: 100%;
-} */
+
 
 .add-game-btn b{
     color: white;
@@ -53,8 +49,10 @@ a:hover {
     height: 200px;
 }
 
-.game-card-img {
-    object-fit: cover;
+.game-card-img img{
+    object-fit: fill;
+    height: 100%;
+    width: 100%;
 }
 
 
@@ -87,5 +85,10 @@ a:hover {
 .other-games{
     height: 50px;
     margin-bottom: -20px;
+}
+
+.review-head {
+    display: flex;
+    
 }
 

@@ -10,10 +10,25 @@ import CardMedia from '@material-ui/core/CardMedia';
 // import CardActionArea from '@material-ui/core/CardActionArea';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+
 
 const useStyles = makeStyles((theme) => ({
     margin: {
       margin: theme.spacing(1),
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     },
   }));
 
@@ -21,9 +36,18 @@ function UserShow({ currentUser }) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [user, setUser] = useState(null)
     const [playSessions, setPlaySessions] = useState([])
+    const [open, setOpen] = useState(false)
 
     const params = useParams()
     const classes = useStyles()
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
 
 
     function handleAccept(id) {
@@ -106,30 +130,51 @@ function UserShow({ currentUser }) {
     
     return (
         <Grid container spacing={2} className="user-show">
-            <Grid container item xs={6}  className="user-info" component={"div"}>
+            <Grid container item xs={6} spacing={2} className="user-info" component={"div"}>
                 <Grid item xs={12}>
-                    <Card>
-                        <CardMedia
-                            component={"div"} 
-                            style={{ height: "400px" }} 
-                            // width="100%" image={user.avatar} 
-                            title={user.username}
-                            className="user-card-img"
-                            >
-                                <img src={user.avatar} alt={user.username} />
-                        </CardMedia>
-                            
-                        <CardContent>
-                            <Typography>{user.username}</Typography>
-                            <Typography>{user.bio}</Typography>
-                            {!currentUser ? 
-                            null
-                            : currentUser.id !== parseInt(params.id) ? null : 
-                            <Typography>{user.discord}</Typography>}
-                        </CardContent>
-                    </Card>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardMedia
+                                component={"div"} 
+                                style={{ height: "400px" }} 
+                                // width="100%" image={user.avatar} 
+                                title={user.username}
+                                className="user-card-img"
+                                >
+                                    <img src={user.avatar} alt={user.username} />
+                            </CardMedia>
+                                
+                            <CardContent>
+                                <Typography>{user.username}</Typography>
+                                <Typography>{user.bio}</Typography>
+                                {!currentUser ? 
+                                null
+                                : currentUser.id !== parseInt(params.id) ? null : 
+                                <div>
+                                <Typography>{user.discord}</Typography>
+                                <Button color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
+                                    Edit Profile
+                                </Button>
+                                </div>
+                                }   
+                            </CardContent>
+                        </Card>
+                    </Grid>
                     <Grid item xs={12} className="user-show-reviews">
-                        <Typography variant={"h4"} paragraph>Reviews</Typography>
+                        <Grid container className="review-head" justify="space-between">
+                            <Typography variant={"h4"}>
+                                Comments <Typography display="inline" color="textSecondary">({user.reviews_as_reviewee.length})</Typography>
+                            </Typography>
+                            <Typography variant={"h6"} display="inline">
+
+                                {user.reviews_as_reviewee.length === 0 ? "0 Score" :
+                                
+                                (user.reviews_as_reviewee.map(review => review.rating)
+                                .reduce((a, b) => a + b, 0) / user.reviews_as_reviewee.length).toFixed(2)
+                                }
+                            </Typography>
+                        </Grid>
+                        {/* <Typography variant={"h4"} paragraph>Reviews</Typography> */}
                         {user.reviews_as_reviewee.map(review => {
                             return <Paper key={review.id}>
                                 <Box p={2} m={1}>
@@ -139,11 +184,9 @@ function UserShow({ currentUser }) {
                                 
                             </Paper>
                         })}
-                        </Grid>
+                    </Grid>
                 {/* <img width="50%" height="300px" className="avatar-pfp" src={user.avatar} alt={user.username}/> */}
-                </Grid>
-                
-                
+                </Grid>     
             </Grid>
             <Grid container spacing={4} item xs={6} direction="column" className="user-games-played">
                 <Grid item xs={12} height={"10px"} component={"div"} className="other-games">
@@ -271,15 +314,32 @@ function UserShow({ currentUser }) {
                 </Grid>
             </Grid>
                         
-            {!currentUser ? 
+            {/* {!currentUser ? 
                 null
                 : currentUser.id !== parseInt(params.id) ? null :
                 <div className="edit-user-info">
                     <EditUserInfo user={currentUser} setUser={setUser}/>
-            </div>}
-            
-
+            </div>} */}
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+                <Fade in={open}>
+                <div className={classes.paper}>
+                    <EditUserInfo user={currentUser} setUser={setUser}/>
+                </div>
+                </Fade>
+            </Modal>
         </Grid>
+        
     )
 }
 

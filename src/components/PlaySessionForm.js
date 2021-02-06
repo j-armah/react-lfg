@@ -1,9 +1,27 @@
 import React , { useState } from 'react'
 import DateTimePicker from 'react-datetime-picker'
+import { makeStyles } from '@material-ui/core/styles';
+import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: '25ch',
+    },
+    label: {
+        margin: theme.spacing(2),
+    }
+}));
 
 function PlaySessionForm({ closeModal, currentUser, userGame }) {
     // const [dateTime, setDateTime] = useState(null)
     const [dateTime, setDateTime] = useState(new Date());
+    const classes = useStyles()
 
     // console.log("currentUser in form", currentUser)
     // console.log("usergame on form", userGame)
@@ -38,19 +56,22 @@ function PlaySessionForm({ closeModal, currentUser, userGame }) {
     }
 
     return (
-        <div>
-        <h2>Play with {userGame.user.username}</h2>
-          <img height="200px" src={userGame.user.avatar} alt={userGame.user.username} className="request-form-img"/>
-          <form onSubmit={handleSubmit}>
-            <p>Start Time: </p>
-            <DateTimePicker
-                onChange={setDateTime}
-                value={dateTime}
-            />
-            <button type="submit"> Send Request </button>
-          </form>
-          <br/>
-          <button onClick={closeModal}>close</button>
+        <div className={classes.root}>
+            <div>
+                <Typography paragraph>Play with {userGame.user.username}</Typography>
+                <img height="200px" src={userGame.user.avatar} alt={userGame.user.username} className="request-form-img"/>
+            </div>  
+            <FormControl onSubmit={handleSubmit}>
+                
+                <FormLabel>Start Time: </FormLabel>
+
+                <DateTimePicker
+                    onChange={setDateTime}
+                    value={dateTime}
+
+                />
+                <Button color="secondary" variant="contained" onClick={handleSubmit} > Send Request </Button>
+            </FormControl>
         </div>
     )
 }
