@@ -7,6 +7,10 @@ a:visited {
     color: white;
 }
 
+a {
+    text-decoration: none;
+}
+
 a:hover {
     color: #3B4B5B;
 }

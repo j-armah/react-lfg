@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
+import { Route, Switch, useHistory } from 'react-router-dom'
 import Nav from './Nav'
 import UserShow from './UserShow'
 import GamePage from './GamePage'
@@ -7,6 +7,7 @@ import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
 import { Grid } from '@material-ui/core'
+import ReviewForm from './ReviewForm'
 
 
  
@@ -16,6 +17,8 @@ function App() {
   const [games, setGames] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
+  const [reviewee, setReviewee] = useState(null)
+  const [sessionId, setSessionId] = useState(null)
   const history = useHistory()
   // const location = useLocation()
 
@@ -100,7 +103,7 @@ function App() {
   }, [])
 
 
-  // console.log(currentUser)
+  console.log(currentUser)
   // console.log(localStorage.getItem("token"))
   // if (!isLoaded) return <h1>Loading</h1>
   return (
@@ -116,7 +119,7 @@ function App() {
           <Grid item xs={false} sm={1} />
             <Grid item xs={12} sm={10}>
               <Route exact path="/users/:id">
-                <UserShow currentUser={currentUser} /> 
+                <UserShow setReviewee={setReviewee} currentUser={currentUser} setSessionId={setSessionId}/> 
               </Route>
               <Route exact path="/games/:id">
                   <GamePage />
@@ -126,6 +129,9 @@ function App() {
               </Route>
               <Route exact path="/user_games/:id">
                 <UserGameDetail currentUser={currentUser}/>
+              </Route>
+              <Route exact path="/reviews/new">
+                <ReviewForm currentUser={currentUser} reviewee={reviewee} sessionId={sessionId}/>
               </Route>
               <Route exact path="/">
                 <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>

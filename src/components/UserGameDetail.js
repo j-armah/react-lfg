@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 // import Modal from 'react-modal';
 import PlaySessionForm from './PlaySessionForm';
 import EditUserGameDetail from './EditUserGameDetail';
@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import Rating from '@material-ui/lab/Rating';
+
 
 // Modal.setAppElement('#root')
 
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(3, 2),
     },
     section2: {
-      margin: theme.spacing(2),
+      margin: theme.spacing(1),
     },
     section3: {
       margin: theme.spacing(3, 1, 1),
@@ -52,6 +54,7 @@ function UserGameDetail({ currentUser }) {
     //var subtitle;
     const params = useParams()
     const classes = useStyles()
+    const history = useHistory()
 
     const handleOpen = () => {
         setOpen(true);
@@ -61,22 +64,13 @@ function UserGameDetail({ currentUser }) {
         setOpen(false);
     };
 
-    // function handleClick() {
-    //     console.log("clicked")
-    // }
-
-    // function openModal() {
-    //     setIsOpen(true);
-    // }
-
-    // function afterOpenModal() {
-    //     // references are now sync'd and can be accessed.
-    //     // subtitle.style.color = '#f00';
-    // }
-
-    // function closeModal(){
-    //     setIsOpen(false);
-    // }
+    function handleDelete() {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/${params.id}`, {
+            method: "DELETE"
+        })
+        .then(resp => resp.json)
+        .then(history.push(`/users/${user.id}`))
+    }
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/${params.id}`)
@@ -95,6 +89,7 @@ function UserGameDetail({ currentUser }) {
                     })
             })
     }, [params.id])
+
 
     if (!isLoaded) return <h2>Loading...</h2>
     return (
@@ -134,7 +129,8 @@ function UserGameDetail({ currentUser }) {
                     {user.reviews_as_reviewee.map(review => {
                         return <Paper key={review.id}>
                             <Box p={2} m={1}>
-                                <Typography paragraph className={classes.section2} variant={"h6"}>{review.rating} | {review.reviewer.username}</Typography>
+                                <Typography className={classes.section2} variant={"h6"}>{review.reviewer.username}</Typography>
+                                <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
                                 <Divider variant="middle"/>
                                 <Typography paragraph className={classes.section2}>{review.contents}</Typography>
                             </Box>
@@ -146,13 +142,14 @@ function UserGameDetail({ currentUser }) {
                     <img height="50%" width="100%" src={user.avatar} alt={user.username}/>
                      
                         <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
-                            <Typography variant={"h3"}>{user.username}</Typography>
+                            <Typography paragraph variant={"h3"}>{user.username}</Typography>
                         </Link>
 
                     {!currentUser ? 
                     null  
                     : currentUser.id === userGame.user.id ? 
                     <div>
+                        <Button onClick={handleDelete} className={classes.section2} color="secondary" variant="contained"> Remove this game</Button>
                         <EditUserGameDetail userGame={userGame} setUserGame={setUserGame}/>
                     </div>
                     :
@@ -178,7 +175,7 @@ function UserGameDetail({ currentUser }) {
             >
                 <Fade in={open}>
                 <div className={classes.paper}>
-                    <PlaySessionForm currentUser={currentUser} userGame={userGame} />
+                    <PlaySessionForm currentUser={currentUser} userGame={userGame} setOpen={setOpen}/>
                 </div>
                 </Fade>
             </Modal>

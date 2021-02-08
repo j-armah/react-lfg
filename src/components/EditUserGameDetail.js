@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography } from '@material-ui/core';
+import { FormControl, Button, FormLabel, Typography, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,7 +67,6 @@ function EditUserGameDetail({ userGame, setUserGame }) {
                 <FormLabel htmlFor="image">Game Image</FormLabel>
                 <TextField
                     label="URL"
-                    id="outlined-secondary" 
                     variant="outlined"
                     color="secondary"
                     lavel="dense"

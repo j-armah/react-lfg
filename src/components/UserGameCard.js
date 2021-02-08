@@ -4,24 +4,21 @@ import Card from '@material-ui/core/Card'
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
 // import { makeStyles } from '@material-ui/styles'
-import { Button, Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
-function GameCard({ game, newUserGame }) {
-    const {id, name, image} =  game
+function UserGameCard({ userGame }) {
+    const { name, image} =  userGame.game
     const location = useLocation()
     // console.log(location.pathname === "/games")
-    
-    function handleClick() {
-        newUserGame(game)
-    }
+    console.log(userGame.game)
 
     return (
         <Grid item xs={4}>
             <Card className="card" component={"div"}>
             <CardActionArea component={"div"}>
-                <Link to={`/games/${id}`}>
+                <Link to={`/user_games/${userGame.id}`}>
                     <CardMedia
                         component={"div"}
                         className="game-card-img"
@@ -32,14 +29,10 @@ function GameCard({ game, newUserGame }) {
                             
                     </CardMedia>
                 </Link>
-                {location.pathname !== "/games" ? null :
-                    <Button onClick={handleClick}> Add Game </Button>
-                }
             </CardActionArea>
-            {/* <Button onClick={handleClick} className="add-game-btn"> Add Game </Button> */}
             </Card>
         </Grid>
     )
 }
 
-export default GameCard
+export default UserGameCard

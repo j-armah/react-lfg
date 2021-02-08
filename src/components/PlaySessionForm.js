@@ -1,7 +1,7 @@
 import React , { useState } from 'react'
 import DateTimePicker from 'react-datetime-picker'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography } from '@material-ui/core';
+import { FormControl, Button, FormLabel, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function PlaySessionForm({ closeModal, currentUser, userGame }) {
+function PlaySessionForm({ currentUser, userGame, setOpen}) {
     // const [dateTime, setDateTime] = useState(null)
     const [dateTime, setDateTime] = useState(new Date());
     const classes = useStyles()
@@ -51,6 +51,7 @@ function PlaySessionForm({ closeModal, currentUser, userGame }) {
         .then(resp => resp.json())
         .then(data => {
             console.log(data)
+            setOpen(false)
         })
 
     }

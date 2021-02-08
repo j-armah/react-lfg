@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography } from '@material-ui/core';
+import { FormControl, Button, FormLabel, TextField, TextareaAutosize, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,14 +70,12 @@ function EditUserInfo({ user, setUser }) {
                 />
 
                 <TextField
-                    label="URL"
-                    id="outlined-secondary" 
+                    label="URL" 
                     variant="outlined"
                     color="secondary"
                     lavel="dense"
                     className={classes.textField}
                     type="text"
-                    id="avatar"
                     autoComplete="off"
                     value={avatar}
                     onChange={(e) => setAvatar(e.target.value)}
