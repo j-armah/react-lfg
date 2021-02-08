@@ -188,6 +188,7 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                                 null
                                 : currentUser.id !== parseInt(params.id) ? null : 
                                 <div>
+                                <Typography variant={"body2"} className={classes.section2}>{user.name}</Typography>
                                 <Typography variant={"body2"} className={classes.section2}>{user.discord}</Typography>
                                 <Typography variant={"body2"} className={classes.section2}>{user.bio}</Typography>
                                 <Button className={classes.section2} color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
@@ -377,7 +378,7 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
             >
                 <Fade in={open}>
                 <div className={classes.paper}>
-                    <EditUserInfo user={currentUser} setUser={setUser}/>
+                    <EditUserInfo user={currentUser} setUser={setUser} setOpen={setOpen}/>
                 </div>
                 </Fade>
             </Modal>

@@ -19,7 +19,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="#">
+      <Link color="inherit" to={"/"}>
         LFG
       </Link>{' '}
       {new Date().getFullYear()}
@@ -59,19 +59,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function Login({ setCurrentUser, firstGame, handleLogin }) {
+function SignUp({ firstGame, handleSignUp }) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [discord, setDiscord] = useState("")
     const [errors, setErrors] = useState("")
     const history = useHistory()
     const classes = useStyles()
+    const defaultImg = "https://i.pinimg.com/originals/b1/92/4d/b1924dce177345b5485bb5490ab3441f.jpg"
 
     function handleSubmit(e) {
         e.preventDefault();
-        const formData = { username, password };
+        const formData = { 
+            avatar: defaultImg, 
+            name: "",
+            bio: "",
+            lfg: true,
+            username, 
+            password, 
+            discord 
+        }
         //console.log(formData)
     
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -83,28 +93,15 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
             // then set that user in state in our App component
             console.log(data.user)
             if (data.user) {
-              handleLogin(data.user)
-              localStorage.setItem("token", data.token)
+                handleSignUp(data.user)
+                localStorage.setItem("token", data.token)
             } else {
-              console.log(data)
-              setErrors(data.error)
+                console.log(data)
+                setErrors(data.error)
               // alert('Incorret username or password')
             }
           });
     }
-
-    // function login() {
-    //     fetch(`${process.env.REACT_APP_API_BASE_URL}/`, {
-    //         method: "POST",
-    //         })
-    //     .then((r) => r.json())
-    //     .then(data => {
-    //         setCurrentUser(data)
-    //         history.push(`/games/${firstGame.id}`)
-    //     });
-    // }
-
-    console.log(firstGame)
 
     return (
       <Grid container component="main" className={classes.root}>
@@ -116,7 +113,7 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -145,10 +142,19 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="discord"
+              label="Discord"
+              type="discord"
+              id="discord"
+              value={discord}
+              onChange={(e) => setDiscord(e.target.value)}
             />
+
             <Button
               type="submit"
               fullWidth
@@ -157,7 +163,7 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
               className={classes.submit}
               onClick={handleSubmit}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid container>
               <Grid item xs>
@@ -166,8 +172,8 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link to={`/signup`} variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link to={"/"} variant="body2">
+                  {"Sign in"}
                 </Link>
               </Grid>
             </Grid>
@@ -178,36 +184,7 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
         </div>
       </Grid>
     </Grid>
-        // <div className="login">
-        //     <video autoPlay muted loop>
-        //         <source src="/Atlias.mp4" type="video/mp4"/>
-        //     </video>
-        //     <div className="login-form-box">
-        //         <form className="login-form" onSubmit={handleSubmit}>
-        //             <h3>Welcome to LFG</h3>
-        //             <label htmlFor="username">Username</label>
-        //             <input
-        //             type="text"
-        //             id="username"
-        //             autoComplete="off"
-                    // value={username}
-                    // onChange={(e) => setUsername(e.target.value)}
-        //             />
-        //             <label htmlFor="password">Password</label>
-        //             <input
-        //             type="password"
-        //             id="password"
-                    // value={password}
-                    // onChange={(e) => setPassword(e.target.value)}
-        //             autoComplete="current-password"
-        //             />
-        //             <Button type="submit" className='submit-button'>Login</Button>
-        //         </form>
-        //         <Button> Login </Button>
-        //         <button onClick={login}>Login</button>
-        //     </div>
-        // </div>
     )
 }
 
-export default Login
+export default SignUp

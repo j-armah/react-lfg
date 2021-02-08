@@ -121,7 +121,7 @@ function Nav({ currentUser, handleLogout }) {
     );
 
     const location = useLocation()
-    if (location.pathname === "/") return null
+    if (location.pathname === "/" || location.pathname === "/signup") return null
     return (
     <div className={classes.grow}>
     <AppBar position="static">

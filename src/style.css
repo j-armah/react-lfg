@@ -3,16 +3,19 @@ body {
 
 }
 
-a:visited {
-    color: white;
-}
+
 
 a {
     text-decoration: none;
+    color: #fff;
 }
 
 a:hover {
     color: #3B4B5B;
+}
+
+a:visited {
+    color: white;
 }
 
 /*  NavBar */

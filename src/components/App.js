@@ -6,6 +6,7 @@ import GamePage from './GamePage'
 import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
+import SignUp from './SignUp'
 import { Grid } from '@material-ui/core'
 import ReviewForm from './ReviewForm'
 
@@ -13,7 +14,7 @@ import ReviewForm from './ReviewForm'
  
 function App() {
   // const [users, setUsers] = useState([])
-  // const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
   const [games, setGames] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [userGames, setUserGames] = useState([])
@@ -43,10 +44,16 @@ function App() {
     })
   }
 
-  function handleLogin(user) {
+  function handleSignUp(user) {
     console.log(user)
     setCurrentUser(user)
     history.push("/games")
+  }
+
+  function handleLogin(user) {
+    console.log(user)
+    setCurrentUser(user)
+    history.push(`/games/${games[0].id}`)
   }
 
   function handleLogout() {
@@ -80,7 +87,7 @@ function App() {
       .then(data => {
         // console.log(data)
         setGames(data)
-
+        setIsLoaded(true)
 
       })
   }, [])
@@ -106,6 +113,7 @@ function App() {
   console.log(currentUser)
   // console.log(localStorage.getItem("token"))
   // if (!isLoaded) return <h1>Loading</h1>
+  if (!isLoaded) return <h1>Loading</h1>
   return (
     <Grid className="app" container direction="column">
       <Grid item>
@@ -133,11 +141,15 @@ function App() {
               <Route exact path="/reviews/new">
                 <ReviewForm currentUser={currentUser} reviewee={reviewee} sessionId={sessionId}/>
               </Route>
-              <Route exact path="/">
-                <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>
-              </Route>
+              
             </Grid>
           <Grid item xs={false} sm={1} />
+          <Route exact path="/">
+              <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>
+          </Route>
+          <Route exact path="/signup">
+              <SignUp setCurrentUser={setCurrentUser} firstGame={games[0]} handleSignUp={handleSignUp}/>
+          </Route>
         </Grid>
 
       </Switch>
