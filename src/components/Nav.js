@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import { Button, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
@@ -9,6 +9,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@material-ui/core/Avatar';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2),
         marginLeft: 0,
         width: '100%',
-        height:'50%',
+        // height:'50%',
         display:'flex',
         [theme.breakpoints.up('sm')]: {
             marginLeft: theme.spacing(3),
@@ -80,18 +82,23 @@ const useStyles = makeStyles((theme) => ({
     },
     login: {
         marginRight: theme.spacing(1),
+    },
+    form: {
+        width: '100%',
     }
 }));
 
 
 function Nav({ currentUser, handleLogout }) {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [search, setSearch] = useState("")
+    const [anchorEl, setAnchorEl] = useState(null)
     const history = useHistory()
-
-    const isMenuOpen = Boolean(anchorEl);
+    const classes = useStyles()
+    const location = useLocation()
+    const isMenuOpen = Boolean(anchorEl)
 
     const handleProfileMenuOpen = (event) => {
+        console.log(event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
 
@@ -99,6 +106,11 @@ function Nav({ currentUser, handleLogout }) {
         history.push(`/users/${currentUser.id}`)
         setAnchorEl(null);
     };
+
+    const handleLogoutClose = () => {
+        setAnchorEl(null);
+        handleLogout()
+    }
 
     const handleMenuClose = () => {
         setAnchorEl(null);
@@ -116,14 +128,22 @@ function Nav({ currentUser, handleLogout }) {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuCloseProfile}>Profile</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogoutClose}>Logout</MenuItem>
         </Menu>
     );
 
-    const location = useLocation()
+    const handleSearch = (event) => {
+        event.preventDefault()
+
+        console.log(search)
+    }
+    
+    // console.log(search)
+    
     if (location.pathname === "/" || location.pathname === "/signup") return null
     return (
     <div className={classes.grow}>
+        
     <AppBar position="static">
         <Toolbar>
         <div className="logo">
@@ -141,6 +161,7 @@ function Nav({ currentUser, handleLogout }) {
             Games
         </Typography>
         
+        
         <div className={classes.grow} />
         <div className={classes.search}>
                 <div className={classes.searchIcon}>
@@ -154,7 +175,40 @@ function Nav({ currentUser, handleLogout }) {
                 }}
                 inputProps={{ 'aria-label': 'search' }}
                 />
+                {/* <form className={classes.form} onSubmit={handleSearch}>
+                <Autocomplete
+                    freeSolo
+                    fullWidth
+                    autoSelect={true}
+                    id="free-solo-2-demo"
+                    disableClearable
+                    options={users.map((user) => 
+                        user.username
+                        )}
+                    onSubmit={() => console.log(search)}
+                    inputValue={search}
+                    onInputChange={(e) => setSearch(e.target.value)}
+                    renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Search Users"
+                        margin="normal"
+                        variant="outlined"
+                        className={classes.autocomplete}
+                        // value={search}
+                        // onChange={(e) => setSearch(e.target.value)}
+                        // classes={{
+                        //     root: classes.inputRoot,
+                        //     input: classes.inputInput,
+                        // }}
+                        InputProps={{ ...params.InputProps, type: 'search' }}
+                    />
+                    )}
+                />
+                </form> */}
         </div>
+        
+        
         <div className={classes.sectionDesktop}>
             
             {/* <IconButton aria-label="show 4 new mails" color="inherit">

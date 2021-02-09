@@ -13,7 +13,7 @@ import ReviewForm from './ReviewForm'
 
  
 function App() {
-  // const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const [games, setGames] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
@@ -24,11 +24,16 @@ function App() {
   // const location = useLocation()
 
   function addUserGame(game) {
+    const defaultImg = "https://wallpapercave.com/wp/wp2623648.jpg"
     console.log(game)
     const newUserGameObj = {
       user_id: currentUser.id,
       game_id: parseInt(game.id),
-      details: ""
+      details: "",
+      platform: "",
+      level: "",
+      server: "",
+      image: defaultImg
     } 
 
     fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games`, {
@@ -41,6 +46,9 @@ function App() {
     .then(resp => resp.json())
     .then(newObj => {
       setUserGames([...userGames, newObj])
+      if (newObj.id === null) {
+        alert("Already added game")
+      }
     })
   }
 
@@ -92,14 +100,14 @@ function App() {
       })
   }, [])
 
-  // useEffect(() => {
-  //   fetch(`${process.env.REACT_APP_API_BASE_URL}/users`)
-  //     .then(resp => resp.json())
-  //     .then(data => {
-  //       // console.log(data)
-  //       setUsers(data)
-  //     })
-  // }, [])
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/users`)
+      .then(resp => resp.json())
+      .then(data => {
+        // console.log(data)
+        setUsers(data)
+      })
+  }, [])
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games`)
@@ -118,7 +126,7 @@ function App() {
     <Grid className="app" container direction="column">
       <Grid item>
         <Route>
-          <Nav currentUser={currentUser} handleLogout={handleLogout} />
+          <Nav currentUser={currentUser} handleLogout={handleLogout} games={games} users={users}/>
         </Route>
       </Grid>
       
@@ -127,13 +135,13 @@ function App() {
           <Grid item xs={false} sm={1} />
             <Grid item xs={12} sm={10}>
               <Route exact path="/users/:id">
-                <UserShow setReviewee={setReviewee} currentUser={currentUser} setSessionId={setSessionId}/> 
+                <UserShow setReviewee={setReviewee} currentUser={currentUser} setSessionId={setSessionId} setCurrentUser={setCurrentUser}/> 
               </Route>
               <Route exact path="/games/:id">
                   <GamePage />
               </Route>
               <Route exact path="/games">
-                <AddGame games={games} newUserGame={addUserGame}/>
+                <AddGame games={games} newUserGame={addUserGame} userGames={userGames}/>
               </Route>
               <Route exact path="/user_games/:id">
                 <UserGameDetail currentUser={currentUser}/>

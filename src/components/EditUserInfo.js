@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function EditUserInfo({ user, setUser, setOpen }) {
+function EditUserInfo({ user, setUser, setOpen, setCurrentUser }) {
     // const {username, name, avatar, bio, discord} = user
     const [username, setUsername] = useState(user.username)
     const [name, setName] = useState(user.name)
@@ -49,6 +49,7 @@ function EditUserInfo({ user, setUser, setOpen }) {
         .then(resp => resp.json())
         .then(newUserObj => {
             console.log(newUserObj)
+            setCurrentUser(newUserObj)
             setUser(newUserObj)
             setOpen(false)
 

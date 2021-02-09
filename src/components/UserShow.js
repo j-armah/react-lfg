@@ -14,6 +14,13 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Rating from '@material-ui/lab/Rating';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Avatar from '@material-ui/core/Avatar';
+
+
+
+
 
 
 
@@ -35,13 +42,49 @@ const useStyles = makeStyles((theme) => ({
     section2: {
         margin: theme.spacing(1),
     },
+    userGamesPlayed: {
+        // margin: "0px"
+    },
+    gameCards: {
+        margin: "10px"
+    },
+    card: {
+        width: "70%",
+        height: "100%"
+    },
+    details: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: "100%"
+    },
+    content: {
+        // flex: '1 0 auto',
+        width: "100%",
+        paddingLeft: "0px"
+    },
+    root: {
+        display: 'flex',
+    },
+    cover: {
+        width: 150,
+    },
+    large: {
+        width: theme.spacing(10),
+        height: theme.spacing(10),
+    },
+    box: {
+        height: "100%",
+        width: "100%"
+    }
   }));
 
-function UserShow({ currentUser, setReviewee, setSessionId }) {
+function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [user, setUser] = useState(null)
     const [playSessions, setPlaySessions] = useState([])
     const [open, setOpen] = useState(false)
+    const [lfg, setLfg] = useState(currentUser.lfg)
+
 
     const params = useParams()
     const classes = useStyles()
@@ -163,18 +206,37 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
 
     }
 
+    const handleToggleLfg = () => {
+        console.log(!lfg)
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${params.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                lfg: !lfg
+            })
+        })
+        .then(resp => resp.json())
+        .then(updObj => {
+            console.log(updObj)
+            setLfg(updObj.lfg)
+        })
+    }
+
     if (!isLoaded) return <h2>Loading...</h2>
     
     return (
         <Grid container spacing={2} className="user-show">
             <Grid container item xs={6} spacing={2} className="user-info" component={"div"}>
                 <Grid item xs={12}>
-                    <Grid item xs={12}>
-                        <Card>
+                    <Grid item xs={12} component={"div"} >
+                        <Box display="flex" justifyContent="center">
+                        <Card className={classes.card}>
+                        
                             <CardMedia
                                 component={"div"} 
                                 style={{ height: "400px" }} 
-                                // width="100%" image={user.avatar} 
                                 title={user.username}
                                 className="user-card-img"
                                 >
@@ -188,16 +250,29 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                                 null
                                 : currentUser.id !== parseInt(params.id) ? null : 
                                 <div>
-                                <Typography variant={"body2"} className={classes.section2}>{user.name}</Typography>
                                 <Typography variant={"body2"} className={classes.section2}>{user.discord}</Typography>
-                                <Typography variant={"body2"} className={classes.section2}>{user.bio}</Typography>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={lfg}
+                                            onChange={handleToggleLfg}
+                                            name="lfg"
+                                            inputProps={{ 'aria-label': 'secondary checkbox' }}
+                                        />
+                                    }
+                                    label="Toggle LFG"
+                                />
+                                <br/>
                                 <Button className={classes.section2} color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
                                     Edit Profile
                                 </Button>
                                 </div>
                                 }   
+                                <Typography variant={"body2"} className={classes.section2}>{user.name}</Typography>
+                                <Typography variant={"body2"} className={classes.section2}>{user.bio}</Typography>
                             </CardContent>
                         </Card>
+                        </Box>
                     </Grid>
                     <Grid item xs={12} className="user-show-reviews">
                         <Grid container className="review-head" justify="space-between">
@@ -214,27 +289,58 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                             </Typography>
                         </Grid>
                         {/* <Typography variant={"h4"} paragraph>Reviews</Typography> */}
-                        {user.reviews_as_reviewee.map(review => {
-                            return <Paper key={review.id}>
-                                <Box p={2} m={1}>
-                                    <Typography className={classes.section2} variant={"h6"}>{review.reviewer.username}</Typography>
-                                    <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
-                                    <Divider variant="middle"/>
-                                    <Typography paragraph className={classes.section2}>{review.contents}</Typography>
+                        {user.reviews_as_reviewee.reverse().map(review => {
+                            return (
+                                <Box mt={2} key={review.id}>
+                                    <Card className={classes.root} >
+                                        <CardMedia
+                                            className={classes.cover}
+                                        >
+                                            <Box display="flex" alignItems="center" justifyContent="center" className={classes.box}>
+                                                <Avatar src={review.reviewer.avatar} className={classes.large}/>
+                                            </Box>     
+                                        </CardMedia>
+                                        <div className={classes.details}>
+                                            <CardContent className={classes.content}>
+                                                <Typography className={classes.section2} variant={"h6"}>
+                                                    {review.reviewer.username}
+                                                </Typography>
+                                                <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
+                                                <Divider variant="middle"/>
+                                                <Typography paragraph className={classes.section2}>{review.contents}</Typography>
+                                            </CardContent>
+                                        </div>
+                                    </Card>
                                 </Box>
-                            </Paper>
+                            
+
+                            // <Paper key={review.id}>
+                            //     <Box p={2} m={1}>
+                            //         <Box display="flex" alignItems="center">
+                            //             <Avatar src={review.reviewer.avatar} className={classes.large}/>
+                            //             <Typography className={classes.section2} variant={"h6"}>
+                            //                 {review.reviewer.username}
+                            //             </Typography>
+                            //         </Box>
+                                    
+                            //         <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
+                            //         <Divider variant="middle"/>
+                            //         <Typography paragraph className={classes.section2}>{review.contents}</Typography>
+                            //     </Box>
+                            // </Paper>
+                            )
                         })}
                     </Grid>
                 {/* <img width="50%" height="300px" className="avatar-pfp" src={user.avatar} alt={user.username}/> */}
                 </Grid>     
             </Grid>
-            <Grid container spacing={4} item xs={6} direction="column" className="user-games-played">
+            <Grid container spacing={4} item xs={6} direction="column" className={classes.userGamesPlayed}>
                 <Grid item xs={12} height={"10px"} component={"div"} className="other-games">
                     <Typography variant={"h4"}>Other Games</Typography>
-                    <Grid container item xs={12} spacing={2} className="other-game-cards">
+                    <Grid container item xs={12} spacing={2} className={classes.gameCards} >
                         {user.user_games.map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
                     </Grid>
-                    {/* REQUEST AREA */}
+{/* REQUEST AREA */}
                     {!currentUser ? 
                     null
                     : currentUser.id !== parseInt(params.id) ? null : 
@@ -253,7 +359,7 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                                             {session.game.name} with <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> - Pending
                                         </Typography>
                                         <Typography variant={"subtitle2"}>
-                                            {handleTime(session.time)}
+                                            {session.time === null ? "No Time atm" : handleTime(session.time)}
                                         </Typography>
                                         <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Cancel Request </Button>
                                     </Box>
@@ -294,7 +400,7 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                                     return <Paper key={session.id}>
                                             <Box p={2} m={1}>
                                                 <Typography variant={"body1"}>
-                                                    <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> accepted your request to play{session.game.name} 
+                                                    <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> accepted your request to play {session.game.name} 
                                                 </Typography>
                                                 <Typography>
                                                     {session.time ? handleTime(session.time) : "No Time ATM"}
@@ -307,7 +413,8 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                                                 {/* <div className="reviewer-div">
                                                     <ReviewForm currentUser={currentUser} user={session.receiver}/>
                                                 </div> */}
-                                                <Button onClick={() => handleReview(session.receiver, session.id)}>Review</Button>
+                                                <Button variant="outlined" onClick={() => handleReview(session.receiver, session.id)}>Review</Button>
+                                                <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button>
                                             </Box>
                                         </Paper>
                                     })
@@ -320,13 +427,19 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
                                     return <Paper key={session.id}>
                                             <Box p={2} m={1}>
                                             <Typography>
-                                                You accepted to play {session.game.name} - with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> at {handleTime(session.time)}
+                                                You accepted to play {session.game.name} - with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> 
+                                            </Typography>
+                                            <Typography>
+                                                {session.time ? handleTime(session.time) : "No Time ATM"}
+                                            </Typography>
+                                            <Typography >
                                                 Add on discord to start playing! - {session.sender.discord}
                                             </Typography>
                                             {/* <div className="reviewer-div">
                                                 <ReviewForm currentUser={currentUser} user={session.sender}/>
                                             </div> */}
-                                            <Button onClick={() => handleReview(session.sender, session.id)}>Review</Button>
+                                            <Button variant="outlined" onClick={() => handleReview(session.sender, session.id)}>Review</Button>
+                                            <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button>
                                             </Box>
                                         </Paper>
                                     })
@@ -378,7 +491,7 @@ function UserShow({ currentUser, setReviewee, setSessionId }) {
             >
                 <Fade in={open}>
                 <div className={classes.paper}>
-                    <EditUserInfo user={currentUser} setUser={setUser} setOpen={setOpen}/>
+                    <EditUserInfo user={currentUser} setUser={setUser} setOpen={setOpen} setCurrentUser={setCurrentUser}/>
                 </div>
                 </Fade>
             </Modal>

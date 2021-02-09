@@ -19,7 +19,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="#">
+      <Link to={'/'} color="inherit" href="/">
         LFG
       </Link>{' '}
       {new Date().getFullYear()}
@@ -145,6 +145,7 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <div className="errors">{errors}</div>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"

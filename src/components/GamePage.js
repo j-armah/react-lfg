@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import UserCard from './UserCard'
 import { Grid } from '@material-ui/core'
 
+
 function GamePage() {
     const [isLoaded, setIsLoaded] = useState(false)
     const [game, setGame] = useState(null)
@@ -24,7 +25,7 @@ function GamePage() {
             .then(resp => resp.json())
             .then(data => {
                 console.log(data)
-                const filteredUserGames = data.filter(ug => ug.game_id === parseInt(params.id))
+                const filteredUserGames = data.filter(ug => ug.game_id === parseInt(params.id)).filter(ug => ug.user.lfg === true)
                 setUserGames(filteredUserGames)
                 
             })

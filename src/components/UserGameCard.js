@@ -12,7 +12,7 @@ function UserGameCard({ userGame }) {
     const { name, image} =  userGame.game
     const location = useLocation()
     // console.log(location.pathname === "/games")
-    console.log(userGame.game)
+    // console.log(userGame.game)
 
     return (
         <Grid item xs={4}>

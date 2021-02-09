@@ -31,11 +31,9 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
     const [contents, setContents] = useState("")
     const [rating, setRating] = useState(1)
     const classes = useStyles()
-    console.log(rating)
-    console.log(currentUser)
-    console.log(reviewee)
 
-    
+    console.log(rating)
+    console.log(reviewee)
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -101,7 +99,7 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
                                 />
                                 </>
                             </label>
-                            <Button variant="contained" color="secondary" onSubmit={handleSubmit} className="submit-button">Submit Review</Button>
+                            <Button variant="contained" color="secondary" onClick={handleSubmit} className="submit-button">Submit Review</Button>
                         </FormControl>
                     </CardContent>
                 </Card>
