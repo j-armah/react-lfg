@@ -1,8 +1,15 @@
 body {
     margin: 0;
-
 }
 
+#root {
+    height: 800px;
+}
+
+
+::-webkit-scrollbar {
+    display: none;
+}
 
 
 a {
@@ -81,10 +88,14 @@ a:visited {
 
 /*  Game Page */
 
-.game-splash img{
+/* .game-banner {
+    height: 40vh;
+} */
+
+/* .game-banner img{
     height: 50vh;
-    width: 100%;
-}
+    width: 100%;  
+} */
 
 
 /* UserGameDetail And UserShow */

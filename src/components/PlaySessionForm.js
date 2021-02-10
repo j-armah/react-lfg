@@ -1,7 +1,7 @@
 import React , { useState } from 'react'
 import DateTimePicker from 'react-datetime-picker'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, Typography } from '@material-ui/core';
+import { FormControl, Button, FormLabel, Typography, Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -57,14 +57,17 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
     }
 
     return (
-        <div className={classes.root}>
-            <div>
-                <Typography paragraph>Play with {userGame.user.username}</Typography>
-                <img height="200px" src={userGame.user.avatar} alt={userGame.user.username} className="request-form-img"/>
-            </div>  
+        <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={6}>
+                <div>
+                    <Typography paragraph>Request to {userGame.user.username}</Typography>
+                    <img height="250px" src={userGame.user.avatar} alt={userGame.user.username} className="request-form-img"/>
+                </div>
+            </Grid>  
+            <Grid item xs={6}>
             <FormControl onSubmit={handleSubmit}>
                 
-                <FormLabel>Start Time: </FormLabel>
+                <FormLabel >Start Time: </FormLabel>
 
                 <DateTimePicker
                     onChange={setDateTime}
@@ -73,7 +76,8 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
                 />
                 <Button color="secondary" variant="contained" onClick={handleSubmit} > Send Request </Button>
             </FormControl>
-        </div>
+            </Grid>
+        </Grid>
     )
 }
 

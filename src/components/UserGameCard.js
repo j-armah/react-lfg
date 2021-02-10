@@ -22,10 +22,10 @@ function UserGameCard({ userGame }) {
                     <CardMedia
                         component={"div"}
                         className="game-card-img"
-                        style={{height: "200px"}} 
+                        style={{height: "180px"}} 
                         // image={image} 
                         title={name}>
-                            <img src={image} alt={name}/>
+                            <img  src={image} alt={name}/>
                             
                     </CardMedia>
                 </Link>

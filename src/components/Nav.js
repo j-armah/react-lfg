@@ -17,12 +17,15 @@ const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
     },
+    appBar: {
+        paddingBottom: 10,
+    },
     menuButton: {
         marginRight: theme.spacing(2),
         marginLeft: theme.spacing(1),
     },
     title: {
-        flexGrow: 1,
+        // flexGrow: 1,
         display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
@@ -98,7 +101,7 @@ function Nav({ currentUser, handleLogout }) {
     const isMenuOpen = Boolean(anchorEl)
 
     const handleProfileMenuOpen = (event) => {
-        console.log(event.currentTarget)
+        // console.log(event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
 
@@ -144,7 +147,7 @@ function Nav({ currentUser, handleLogout }) {
     return (
     <div className={classes.grow}>
         
-    <AppBar position="static">
+    <AppBar position="static" className={classes.appBar}>
         <Toolbar>
         <div className="logo">
             <img height="50px" width="110px" src="https://i.imgur.com/NoEHEH8.png" />
@@ -157,9 +160,9 @@ function Nav({ currentUser, handleLogout }) {
         >
             <MenuIcon />
         </IconButton>
-        <Typography className={classes.title} variant="h6" noWrap onClick={() => history.push("/games")}>
-            Games
-        </Typography>
+        <Button className={classes.title} onClick={() => history.push("/games")}>
+            All Games
+        </Button>
         
         
         <div className={classes.grow} />
@@ -230,12 +233,12 @@ function Nav({ currentUser, handleLogout }) {
             :
             <div>
             <IconButton
-            edge="end"
-            aria-label={"current user"}
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="inherit"
+                edge="end"
+                aria-label={"current user"}
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
             >
                 <Avatar src={currentUser.avatar} className={classes.large}/>
             </IconButton>

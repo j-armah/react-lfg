@@ -18,12 +18,6 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
 
-
-
-
-
-
-
 const useStyles = makeStyles((theme) => ({
     margin: {
       margin: theme.spacing(1),
@@ -64,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         display: 'flex',
+        borderRadius: 10,
     },
     cover: {
         width: 150,
@@ -75,6 +70,13 @@ const useStyles = makeStyles((theme) => ({
     box: {
         height: "100%",
         width: "100%"
+    },
+    userShow: {
+        marginTop: 10,
+    },
+    border: {
+        borderRadius: 10,
+        marginTop: theme.spacing(2)
     }
   }));
 
@@ -83,6 +85,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     const [user, setUser] = useState(null)
     const [playSessions, setPlaySessions] = useState([])
     const [open, setOpen] = useState(false)
+    // const [reviews, setReviews] = useState([])
     const [lfg, setLfg] = useState(currentUser.lfg)
 
 
@@ -175,6 +178,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
             .then(data => {
                 // console.log(data)
                 setUser(data)
+                // setReviews(data.reviews_as_reviewee.reverse())
                 setIsLoaded(true)
             })
     }, [params.id])
@@ -227,7 +231,9 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     if (!isLoaded) return <h2>Loading...</h2>
     
     return (
-        <Grid container spacing={2} className="user-show">
+        <Grid container spacing={2} className={classes.userShow}>
+            {/* SideBar */}
+            {/* <Grid item xs={false} sm={1} /> */}
             <Grid container item xs={6} spacing={2} className="user-info" component={"div"}>
                 <Grid item xs={12}>
                     <Grid item xs={12} component={"div"} >
@@ -280,16 +286,16 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 Comments <Typography display="inline" color="textSecondary">({user.reviews_as_reviewee.length})</Typography>
                             </Typography>
                             <Typography variant={"h6"} display="inline">
-
-                                {user.reviews_as_reviewee.length === 0 ? "0 Score" :
-                                
-                                (user.reviews_as_reviewee.map(review => review.rating)
-                                .reduce((a, b) => a + b, 0) / user.reviews_as_reviewee.length).toFixed(2)
-                                }
+                                {user.avg} Score<br/>
+                                {/* {user.reviews_as_reviewee.length === 0 ? "0 Score" :
+                                (user.reviews_as_reviewee
+                                    .reduce((sum, review) => sum + review.rating, 0) / user.reviews_as_reviewee.length)
+                                    .toFixed(2)
+                                } */}
                             </Typography>
                         </Grid>
                         {/* <Typography variant={"h4"} paragraph>Reviews</Typography> */}
-                        {user.reviews_as_reviewee.reverse().map(review => {
+                        {user.reviews_as_reviewee.map(review => {
                             return (
                                 <Box mt={2} key={review.id}>
                                     <Card className={classes.root} >
@@ -331,7 +337,6 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                             )
                         })}
                     </Grid>
-                {/* <img width="50%" height="300px" className="avatar-pfp" src={user.avatar} alt={user.username}/> */}
                 </Grid>     
             </Grid>
             <Grid container spacing={4} item xs={6} direction="column" className={classes.userGamesPlayed}>
@@ -353,8 +358,8 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                             }).filter(session => {
                                 return session.sender_id === currentUser.id && session.is_accepted === false && session.rejected === false
                             }).map(session => {
-                                return <Paper key={session.id}>
-                                    <Box p={2} m={1}>
+                                return <Paper key={session.id} className={classes.border}>
+                                    <Box p={2} m={1} >
                                         <Typography variant={"body1"}>
                                             {session.game.name} with <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> - Pending
                                         </Typography>
@@ -374,7 +379,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                             }).filter(session => {
                                 return session.receiver_id === currentUser.id && session.is_accepted === false && session.rejected === false
                             }).map(session => {
-                                return <Paper key={session.id}>
+                                return <Paper key={session.id} className={classes.border}>
                                     <Box p={2} m={1}>
                                         <Typography>
                                         <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> requested to play {session.game.name}
@@ -397,7 +402,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 }).filter(session => {
                                     return session.sender_id === currentUser.id && session.is_accepted === true
                                 }).map(session => {
-                                    return <Paper key={session.id}>
+                                    return <Paper key={session.id} className={classes.border} >
                                             <Box p={2} m={1}>
                                                 <Typography variant={"body1"}>
                                                     <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> accepted your request to play {session.game.name} 
@@ -424,7 +429,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 }).filter(session => {
                                     return session.receiver_id === currentUser.id && session.is_accepted === true
                                 }).map(session => {
-                                    return <Paper key={session.id}>
+                                    return <Paper key={session.id} className={classes.border}>
                                             <Box p={2} m={1}>
                                             <Typography>
                                                 You accepted to play {session.game.name} - with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> 
@@ -452,7 +457,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 }).filter(session => {
                                     return session.sender_id === currentUser.id && session.rejected === true
                                 }).map(session => {
-                                    return <Paper key={session.id}>
+                                    return <Paper key={session.id} className={classes.border}>
                                         <Box p={2} m={1}>
                                             <Typography>
                                             <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> rejected your request to play {session.game.name}
@@ -470,7 +475,8 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                     </Grid>}
                 </Grid>
             </Grid>
-                        
+            {/* SideBar */}
+            {/* <Grid item xs={false} sm={1} />            */}
             {/* {!currentUser ? 
                 null
                 : currentUser.id !== parseInt(params.id) ? null :

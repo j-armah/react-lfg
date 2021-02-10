@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography, Box ,Card ,Divider ,Grid } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
 import CardMedia from '@material-ui/core/CardMedia';
 // import CardActionArea from '@material-ui/core/CardActionArea';
 // import CardActions from '@material-ui/core/CardActions';
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function ReviewForm({ currentUser, sessionId, reviewee }) {
     const [contents, setContents] = useState("")
     const [rating, setRating] = useState(1)
+    const history = useHistory()
     const classes = useStyles()
 
     console.log(rating)
@@ -59,6 +60,8 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
             console.log(newReviewObj)
             if (newReviewObj.id === null) {
                 alert("Can only review a user once!")
+            } else {
+                history.push(`/users/${currentUser.id}`)
             }
         })
     }

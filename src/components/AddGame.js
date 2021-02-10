@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-function AddGame({ games, newUserGame }) {
+function AddGame({ games, newUserGame, currentUser }) {
     const [search, setSearch] =  useState("")
 
     const sortedGames = games.sort((gameA, gameB) => {
@@ -18,7 +18,7 @@ function AddGame({ games, newUserGame }) {
     }).filter(game => game.name.toLowerCase().includes(search.toLowerCase()))
     
      const gameArray = sortedGames.map(game => 
-        <GameCard key={game.id} game={game} newUserGame={newUserGame}/>    
+        <GameCard key={game.id} game={game} newUserGame={newUserGame} currentUser={currentUser}/>    
     )
     
     return (
@@ -37,9 +37,11 @@ function AddGame({ games, newUserGame }) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
-            <Grid container spacing={2} className="games-container">
+
+            <Grid container item spacing={2} xs={"auto"} className="games-container">
                     {gameArray}
             </Grid>
+
         </div>
     )
 }

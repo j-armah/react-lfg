@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Switch, useHistory } from 'react-router-dom'
+import { Route, Switch, useHistory, useLocation, useParams} from 'react-router-dom'
 import Nav from './Nav'
 import UserShow from './UserShow'
 import GamePage from './GamePage'
@@ -7,9 +7,19 @@ import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
 import SignUp from './SignUp'
-import { Grid } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 import ReviewForm from './ReviewForm'
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+  load: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
+  },
+}));
 
  
 function App() {
@@ -22,6 +32,11 @@ function App() {
   const [sessionId, setSessionId] = useState(null)
   const history = useHistory()
   // const location = useLocation()
+  // const params = useParams()
+  // const classes = useStyles()
+
+  // console.log(location.pathname === '/users/')
+  // console.log(history.location)
 
   function addUserGame(game) {
     const defaultImg = "https://wallpapercave.com/wp/wp2623648.jpg"
@@ -121,7 +136,11 @@ function App() {
   console.log(currentUser)
   // console.log(localStorage.getItem("token"))
   // if (!isLoaded) return <h1>Loading</h1>
-  if (!isLoaded) return <h1>Loading</h1>
+  if (!isLoaded) return (
+    <Box position="relative" display="inline-flex" justifyContent="center" alignItems="center">
+      <CircularProgress color="secondary" />
+    </Box>
+  ) 
   return (
     <Grid className="app" container direction="column">
       <Grid item>
@@ -132,26 +151,31 @@ function App() {
       
       <Switch>
         <Grid item container>
+          {/* <Grid item xs={false} sm={1} /> */}
+          
           <Grid item xs={false} sm={1} />
-            <Grid item xs={12} sm={10}>
-              <Route exact path="/users/:id">
-                <UserShow setReviewee={setReviewee} currentUser={currentUser} setSessionId={setSessionId} setCurrentUser={setCurrentUser}/> 
+              <Grid item xs={12} sm={10}>
+                <Route exact path="/users/:id">
+                  <UserShow setReviewee={setReviewee} currentUser={currentUser} setSessionId={setSessionId} setCurrentUser={setCurrentUser}/> 
+                </Route>
+                <Route exact path="/games">
+                  <AddGame games={games} newUserGame={addUserGame} userGames={userGames} currentUser={currentUser}/>
+                </Route>        
+                <Route exact path="/reviews/new">
+                  <ReviewForm currentUser={currentUser} reviewee={reviewee} sessionId={sessionId}/>
+                </Route>
+              </Grid>
+            <Grid item xs={false} sm={1} />
+
+            <Grid item xs={12} sm={12}>
+              <Route exact path="/user_games/:id">
+                <UserGameDetail currentUser={currentUser} games={games}/>
               </Route>
               <Route exact path="/games/:id">
-                  <GamePage />
+                  <GamePage games={games}/>
               </Route>
-              <Route exact path="/games">
-                <AddGame games={games} newUserGame={addUserGame} userGames={userGames}/>
-              </Route>
-              <Route exact path="/user_games/:id">
-                <UserGameDetail currentUser={currentUser}/>
-              </Route>
-              <Route exact path="/reviews/new">
-                <ReviewForm currentUser={currentUser} reviewee={reviewee} sessionId={sessionId}/>
-              </Route>
-              
             </Grid>
-          <Grid item xs={false} sm={1} />
+          {/* <Grid item xs={false} sm={1} /> */}
           <Route exact path="/">
               <Login setCurrentUser={setCurrentUser} firstGame={games[0]} handleLogin={handleLogin}/>
           </Route>
