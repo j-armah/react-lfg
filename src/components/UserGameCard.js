@@ -26,7 +26,6 @@ function UserGameCard({ userGame }) {
                         // image={image} 
                         title={name}>
                             <img  src={image} alt={name}/>
-                            
                     </CardMedia>
                 </Link>
             </CardActionArea>

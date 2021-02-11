@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Switch, useHistory, useLocation, useParams} from 'react-router-dom'
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import Nav from './Nav'
 import UserShow from './UserShow'
 import GamePage from './GamePage'
@@ -7,10 +7,19 @@ import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
 import SignUp from './SignUp'
-import { Grid, Box } from '@material-ui/core'
 import ReviewForm from './ReviewForm'
+import { Grid, Box } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import InboxComponent from './InboxComponent'
+import Inbox from './Inbox'
+import Fab from '@material-ui/core/Fab';
+import CommentIcon from '@material-ui/icons/Comment';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Zoom from '@material-ui/core/Zoom';
+import Popover from '@material-ui/core/Popover';
+
 
 const useStyles = makeStyles((theme) => ({
   load: {
@@ -19,6 +28,22 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
     },
   },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  root: {
+    position: 'fixed',
+    bottom: theme.spacing(12),
+    right: theme.spacing(3),
+  },
+  chatBox: {
+    width: '1310px',
+    height: '600px',
+    overflow: 'hidden',
+    color: "",
+  }
 }));
 
  
@@ -30,13 +55,39 @@ function App() {
   const [userGames, setUserGames] = useState([])
   const [reviewee, setReviewee] = useState(null)
   const [sessionId, setSessionId] = useState(null)
-  const history = useHistory()
-  // const location = useLocation()
-  // const params = useParams()
-  // const classes = useStyles()
+  const [otherUser, setOtherUser] = useState(null)
 
-  // console.log(location.pathname === '/users/')
-  // console.log(history.location)
+  const [anchorElChat, setAnchorElChat] = useState(null)
+
+  const history = useHistory()
+  const location = useLocation()
+  // const params = useParams()
+  const classes = useStyles()
+
+  const handleClickChat = (event) => {
+    setAnchorElChat(event.currentTarget);
+  };
+
+  const handleCloseChat = () => {
+    setAnchorElChat(null);
+  };
+
+  const open = Boolean(anchorElChat);
+  const id = open ? 'chat' : undefined;
+
+  const trigger = useScrollTrigger({
+    target: window,
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+  };
 
   function addUserGame(game) {
     const defaultImg = "https://wallpapercave.com/wp/wp2623648.jpg"
@@ -97,7 +148,6 @@ function App() {
       })
         .then((r) => r.json())
         .then((user) => {
-          // console.log(user)
           setCurrentUser(user);
           // setIsLoaded(true)
         });
@@ -119,7 +169,6 @@ function App() {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/users`)
       .then(resp => resp.json())
       .then(data => {
-        // console.log(data)
         setUsers(data)
       })
   }, [])
@@ -134,7 +183,7 @@ function App() {
 
 
   console.log(currentUser)
-  // console.log(localStorage.getItem("token"))
+
   // if (!isLoaded) return <h1>Loading</h1>
   if (!isLoaded) return (
     <Box position="relative" display="inline-flex" justifyContent="center" alignItems="center">
@@ -142,18 +191,20 @@ function App() {
     </Box>
   ) 
   return (
+    <>
     <Grid className="app" container direction="column">
+
       <Grid item>
         <Route>
           <Nav currentUser={currentUser} handleLogout={handleLogout} games={games} users={users}/>
-        </Route>
+        </Route> 
       </Grid>
-      
+
       <Switch>
         <Grid item container>
           {/* <Grid item xs={false} sm={1} /> */}
-          
           <Grid item xs={false} sm={1} />
+          
               <Grid item xs={12} sm={10}>
                 <Route exact path="/users/:id">
                   <UserShow setReviewee={setReviewee} currentUser={currentUser} setSessionId={setSessionId} setCurrentUser={setCurrentUser}/> 
@@ -164,16 +215,21 @@ function App() {
                 <Route exact path="/reviews/new">
                   <ReviewForm currentUser={currentUser} reviewee={reviewee} sessionId={sessionId}/>
                 </Route>
+                
               </Grid>
             <Grid item xs={false} sm={1} />
 
             <Grid item xs={12} sm={12}>
               <Route exact path="/user_games/:id">
-                <UserGameDetail currentUser={currentUser} games={games}/>
+                <UserGameDetail currentUser={currentUser} games={games} handleClickChat={handleClickChat} setOtherUser={setOtherUser}/>
               </Route>
               <Route exact path="/games/:id">
                   <GamePage games={games}/>
               </Route>
+              <Route exact path="/inbox">
+                <Inbox user={currentUser} otherUser={otherUser}/>
+              </Route>
+              
             </Grid>
           {/* <Grid item xs={false} sm={1} /> */}
           <Route exact path="/">
@@ -183,10 +239,45 @@ function App() {
               <SignUp setCurrentUser={setCurrentUser} firstGame={games[0]} handleSignUp={handleSignUp}/>
           </Route>
         </Grid>
-
-      </Switch>
+      </Switch>   
     </Grid>
+
+    {location.pathname === '/' || location.pathname === '/signup'? null :
+    <div>
+      <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleClickChat}>
+        <CommentIcon />
+      </Fab>
+      <Zoom in={trigger}>
+        <div onClick={handleClick} role="presentation" className={classes.root}>
+          <Fab onClick={handleClick} color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </div>
+      </Zoom>
+      </div>}
+
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorElChat}
+        onClose={handleCloseChat}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <Box p={1} bgcolor="transparent" mx="auto" justifyContent="center" alignItems="center" className={classes.chatBox}>
+          <InboxComponent user={currentUser} otherUser={otherUser}/>
+        </Box>
+      </Popover>
+    </>
   );
 }
+
+
 
 export default App;

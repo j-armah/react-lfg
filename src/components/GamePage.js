@@ -7,10 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import Popover from '@material-ui/core/Popover';
 
-
-
-
-
 const useStyles = makeStyles((theme) => ({
     gamePage: {
         position: 'relative',
@@ -32,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     box: {
         height: "60%",
-        positin: "fixed",
+        // position: "fixed",
         // marginLeft: "calc(100% - 1600px)",
         // right: "20%",
         // marginLeft: "100px",
@@ -49,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
         // overflow: "auto",
     }
 }));
-
 
 function GamePage({ games }) {
     const [isLoaded, setIsLoaded] = useState(false)
@@ -74,7 +69,6 @@ function GamePage({ games }) {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/games/${params.id}`)
             .then(resp => resp.json())
             .then(data => {
-                //console.log(data)
                 setGame(data)
                 setIsLoaded(true)
             })
@@ -84,17 +78,13 @@ function GamePage({ games }) {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/`)
             .then(resp => resp.json())
             .then(data => {
-                console.log(data)
                 const filteredUserGames = data.filter(ug => ug.game_id === parseInt(params.id)).filter(ug => ug.user.lfg === true)
                 setUserGames(filteredUserGames)
                 
             })
     }, [params.id])
 
-    console.log(userGames)
-
     if (!isLoaded) return <h2>Loading...</h2>
-    
     return (
 
         <Grid container item className={classes.gamePage} xs={"auto"}>
