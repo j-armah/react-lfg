@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function UserGameDetail({ currentUser, games }) {
+function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [userGame, setUserGame] = useState(null)
     const [user, setUser] = useState(null)
@@ -142,6 +142,12 @@ function UserGameDetail({ currentUser, games }) {
 
     const openPop = Boolean(anchorEl);
     const id = openPop ? 'simple-popover' : undefined;
+    
+    const handleChat = (event) => {
+        // console.log(user)
+        setOtherUser(user)
+        handleClickChat(event)
+    }
 
     function handleDelete() {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/${params.id}`, {
@@ -169,7 +175,7 @@ function UserGameDetail({ currentUser, games }) {
             })
     }, [params.id])
 
-
+    console.log(user)
     if (!isLoaded) return <h2>Loading...</h2>
     return (
         <Grid container spacing={4} className={classes.userGamePage} component={"div"}>
@@ -314,6 +320,9 @@ function UserGameDetail({ currentUser, games }) {
                         <Button color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
                             Let's Game
                         </Button>
+                        <Button onClick={handleChat}>
+                            Chat
+                        </Button>
                     </div>}
             </Grid>
             {/* SideBar */}
@@ -336,7 +345,6 @@ function UserGameDetail({ currentUser, games }) {
                 </div>
                 </Fade>
             </Modal>
-            
         </Grid>
     )
 }

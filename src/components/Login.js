@@ -179,35 +179,6 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
         </div>
       </Grid>
     </Grid>
-        // <div className="login">
-        //     <video autoPlay muted loop>
-        //         <source src="/Atlias.mp4" type="video/mp4"/>
-        //     </video>
-        //     <div className="login-form-box">
-        //         <form className="login-form" onSubmit={handleSubmit}>
-        //             <h3>Welcome to LFG</h3>
-        //             <label htmlFor="username">Username</label>
-        //             <input
-        //             type="text"
-        //             id="username"
-        //             autoComplete="off"
-                    // value={username}
-                    // onChange={(e) => setUsername(e.target.value)}
-        //             />
-        //             <label htmlFor="password">Password</label>
-        //             <input
-        //             type="password"
-        //             id="password"
-                    // value={password}
-                    // onChange={(e) => setPassword(e.target.value)}
-        //             autoComplete="current-password"
-        //             />
-        //             <Button type="submit" className='submit-button'>Login</Button>
-        //         </form>
-        //         <Button> Login </Button>
-        //         <button onClick={login}>Login</button>
-        //     </div>
-        // </div>
     )
 }
 

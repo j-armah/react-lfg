@@ -8,9 +8,6 @@ import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import Popover from '@material-ui/core/Popover';
 
 
-
-
-
 const useStyles = makeStyles((theme) => ({
     gamePage: {
         position: 'relative',
@@ -32,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
     box: {
         height: "60%",
-        positin: "fixed",
+        // position: "fixed",
         // marginLeft: "calc(100% - 1600px)",
         // right: "20%",
         // marginLeft: "100px",

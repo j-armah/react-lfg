@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     appBar: {
-        paddingBottom: 10,
+        paddingBottom: 0,
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -115,6 +115,11 @@ function Nav({ currentUser, handleLogout }) {
         handleLogout()
     }
 
+    const handleMenuCloseInbox = () => {
+        history.push(`/inbox`)
+        setAnchorEl(null);
+    };
+
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
@@ -131,7 +136,8 @@ function Nav({ currentUser, handleLogout }) {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuCloseProfile}>Profile</MenuItem>
-            <MenuItem onClick={handleLogoutClose}>Logout</MenuItem>
+            <MenuItem onClick={handleMenuCloseInbox}>Inbox</MenuItem>
+            <MenuItem onClick={handleLogoutClose}>Logout</MenuItem> 
         </Menu>
     );
 
@@ -148,7 +154,7 @@ function Nav({ currentUser, handleLogout }) {
     <div className={classes.grow}>
         
     <AppBar position="static" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar id="back-to-top-anchor">
         <div className="logo">
             <img height="50px" width="110px" src="https://i.imgur.com/NoEHEH8.png" />
         </div>

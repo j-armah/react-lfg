@@ -225,6 +225,10 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
         .then(updObj => {
             console.log(updObj)
             setLfg(updObj.lfg)
+            setCurrentUser({
+                ...currentUser,
+                lfg: updObj.lfg
+            })
         })
     }
 
