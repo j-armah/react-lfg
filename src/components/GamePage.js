@@ -79,8 +79,7 @@ function GamePage({ games }) {
             .then(resp => resp.json())
             .then(data => {
                 const filteredUserGames = data.filter(ug => ug.game_id === parseInt(params.id)).filter(ug => ug.user.lfg === true)
-                setUserGames(filteredUserGames)
-                
+                setUserGames(filteredUserGames)    
             })
     }, [params.id])
 
@@ -139,7 +138,7 @@ function GamePage({ games }) {
                                     <Box p={6} mx="auto" justifyContent="center" alignItems="center" className={classes.gameRec}>
                                         {/* <Paper className={classes.gameRec}> */}
                                         <Typography variant={"h3"} paragraph> Recommended Games </Typography>
-                                            <Grid container xs={12} spacing={4}>
+                                            <Grid container spacing={4}>
                                                 {games.slice(0,9).map(game => <GameCard key={game.id} game={game} handleClose={handleClose}/> )} 
                                             </Grid>
                                         {/* </Paper> */}

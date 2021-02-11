@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 // import { Button } from '@material-ui/core'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -63,7 +63,6 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [errors, setErrors] = useState("")
-    const history = useHistory()
     const classes = useStyles()
 
     function handleSubmit(e) {
@@ -92,17 +91,6 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
             }
           });
     }
-
-    // function login() {
-    //     fetch(`${process.env.REACT_APP_API_BASE_URL}/`, {
-    //         method: "POST",
-    //         })
-    //     .then((r) => r.json())
-    //     .then(data => {
-    //         setCurrentUser(data)
-    //         history.push(`/games/${firstGame.id}`)
-    //     });
-    // }
 
     console.log(firstGame)
 

@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 // import { Button } from '@material-ui/core'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
@@ -64,7 +62,6 @@ function SignUp({ firstGame, handleSignUp }) {
     const [password, setPassword] = useState("")
     const [discord, setDiscord] = useState("")
     const [errors, setErrors] = useState("")
-    const history = useHistory()
     const classes = useStyles()
     const defaultImg = "https://i.pinimg.com/originals/b1/92/4d/b1924dce177345b5485bb5490ab3441f.jpg"
 
@@ -154,7 +151,7 @@ function SignUp({ firstGame, handleSignUp }) {
               value={discord}
               onChange={(e) => setDiscord(e.target.value)}
             />
-
+            <div className="errors">{errors}</div>
             <Button
               type="submit"
               fullWidth
