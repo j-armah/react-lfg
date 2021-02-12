@@ -1,7 +1,12 @@
 import React , { useState } from 'react'
-import DateTimePicker from 'react-datetime-picker'
+// import DateTimePicker from 'react-datetime-picker'
+import { format } from 'date-fns';
+// import DateFnsUtils from '@date-io/date-fns'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, Typography, Grid } from '@material-ui/core';
+import { FormControl, Button, FormLabel, Typography, Grid, TextField } from '@material-ui/core';
+// import DateTimePicker from '@material-ui/lab/DateTimePicker';
+// import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
+// import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -68,12 +73,32 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
             <FormControl onSubmit={handleSubmit}>
                 
                 <FormLabel >Start Time: </FormLabel>
-
+{/* 
                 <DateTimePicker
                     onChange={setDateTime}
                     value={dateTime}
 
-                />
+                /> */}
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DateTimePicker
+                        renderInput={(props) => <TextField {...props} />}
+                        label="DateTimePicker"
+                        value={value}
+                        onChange={(newValue) => {
+                        setValue(newValue);
+                        }}
+                    />
+                    </LocalizationProvider> */}
+                    <TextField
+                        id="datetime-local"
+                        label="Next appointment"
+                        type="datetime-local"
+                        // defaultValue={format(Date.now, 'YYYY-MM-DD[T]HH:mmZZ')}
+                        style={{ width: 250 }}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                    />
                 <Button color="secondary" variant="contained" onClick={handleSubmit} > Send Request </Button>
             </FormControl>
             </Grid>

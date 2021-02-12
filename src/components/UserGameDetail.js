@@ -16,6 +16,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import Popover from '@material-ui/core/Popover';
+import Chip from '@material-ui/core/Chip';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -110,7 +111,10 @@ const useStyles = makeStyles((theme) => ({
     },
     image: {
         borderRadius: 10,
-    }
+    },
+    chip: {
+        margin: theme.spacing(0.5),
+    },
 }));
 
 function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
@@ -120,6 +124,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const [showMore, setShowMore] = useState(3)
+    const [userGameReviews, setUserGameReviews] = useState([])
     // const [modalIsOpen, setIsOpen] = React.useState(false);
     //var subtitle;
     const params = useParams()
@@ -151,6 +156,13 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
         handleClickChat(event)
     }
 
+    const avgGameScore = () => {
+        const avg = userGameReviews.reduce((sum, review) => sum + review.rating, 0) / userGameReviews.length
+
+        
+       return userGameReviews.length > 0 ?  avg.toFixed(1) :  "0"
+    }
+
     function handleDelete() {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/${params.id}`, {
             method: "DELETE"
@@ -159,25 +171,51 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
         .then(history.push(`/users/${user.id}`))
     }
 
+    const countTags = () => {
+        const hash = {}
+        const array = []
+        const tags = userGameReviews.map(review => review.tags)
+
+        for (const tagArray of tags) {
+            for (let j=0; j < tagArray.length; j++) {
+                if(hash[tagArray[j].name]){
+                    hash[tagArray[j].name] += 1
+                } else {
+                    hash[tagArray[j].name] = 1
+                }
+            }
+        }
+
+
+        for(const prop in hash) {
+            array.push({[prop]: hash[prop]})
+        }
+
+        console.log(hash)
+        console.log(array)
+        return array
+    }
+
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/user_games/${params.id}`)
             .then(resp => resp.json())
             .then(data => {
                 setUserGame(data)
-                //setUser(data.user)
+                // console.log(data.game.name)
                 
                 fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${data.user.id}`)
                     .then(resp => resp.json())
-                    .then(userr => {
-                        console.log(userr)
-                        setUser(userr)
-                        
+                    .then(userObj => {
+                        // console.log(userObj)
+                        setUser(userObj)
+                        const reviews = userObj.reviews_as_reviewee.filter(review => review.game === data.game.name)
+                        setUserGameReviews(reviews)
                         setIsLoaded(true)
                     })
             })
     }, [params.id])
 
-    console.log(user)
+    // console.log(userGameReviews)
     if (!isLoaded) return <h2>Loading...</h2>
     return (
         <Grid container spacing={4} className={classes.userGamePage} component={"div"}>
@@ -264,10 +302,10 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                 <Grid item xs={12} className="user-reviews" component={"div"}>
                     <Grid container className="review-head" justify="space-between">
                         <Typography variant={"h4"}>
-                            Comments <Typography display="inline" color="textSecondary">({user.reviews_as_reviewee.length})</Typography>
+                            Comments <Typography display="inline" color="textSecondary">({userGameReviews.length})</Typography>
                         </Typography>
                         <Typography variant={"h6"}>
-                            {user.avg} Score
+                            {avgGameScore()} Score
                             {/* {user.reviews_as_reviewee.length === 0 ? "0" :
                                 
                                 (user.reviews_as_reviewee.map(review => review.rating)
@@ -275,7 +313,11 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                             } Score */}
                         </Typography>
                     </Grid>
-                    {user.reviews_as_reviewee.slice(0,showMore).map(review => {
+                    <Box>
+                        {countTags().map(tagObj => <Chip color="secondary" clickable size="small"label={`${Object.keys(tagObj)} (${Object.values(tagObj)})`} className={classes.chip}/>)}
+                    </Box>
+
+                    {userGameReviews.slice(0,showMore).map(review => {
                         return (
                             <Box mt={2} key={review.id} >
                                 <Card className={classes.rootCard} >
@@ -294,6 +336,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                                             <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
                                             <Divider variant="middle"/>
                                             <Typography paragraph className={classes.section2}>{review.contents}</Typography>
+                                            {review.tags.map(tag => <Chip color="secondary" clickable size="small"label={tag.name} className={classes.chip}/>)}
                                         </CardContent>
                                     </div>
                                 </Card>
@@ -302,11 +345,11 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                     })}
                 </Grid>
                 {user.reviews_as_reviewee.length <= 3 ? null :
-                <Grid>
+                <Box width="100%">
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <Button size="small" color="secondary" onClick={() => setShowMore(showMore + 3)}> + See More </Button>
                     </Box>
-                </Grid>}
+                </Box>}
             </Grid>
             <Grid item xs={3} component={"div"} className={classes.userGameDetail}>
                     <img height="100%" width="100%" className={classes.image} src={user.avatar} alt={user.username}/>

@@ -17,6 +17,8 @@ import Rating from '@material-ui/lab/Rating';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import { format } from 'date-fns'
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -77,7 +79,10 @@ const useStyles = makeStyles((theme) => ({
     border: {
         borderRadius: 10,
         marginTop: theme.spacing(2)
-    }
+    },
+    chip: {
+        margin: theme.spacing(0.5),
+    },
   }));
 
 function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
@@ -87,7 +92,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     const [open, setOpen] = useState(false)
     const [showMore, setShowMore] = useState(3)
     // const [reviews, setReviews] = useState([])
-    const [lfg, setLfg] = useState(currentUser.lfg)
+    // const [lfg, setLfg] = useState(currentUser)
 
 
     const params = useParams()
@@ -201,31 +206,32 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     // console.log(user)
     function handleTime(time) {
         // console.log(time)
-        const calendar = time.split(/[\D.]/).slice(0, 5)
-        const event = new Date(calendar[0], calendar[1]-1, calendar[2], calendar[3], calendar[4])
-        // Date(year, month, day, hours, minutes, seconds, milliseconds)
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}
-        // console.log(calendar)
-        // console.log(event.toLocaleDateString(undefined, options))
-        return event.toLocaleDateString(undefined, options)
-
+        // const calendar = time.split(/[\D.]/).slice(0, 5)
+        // const event = new Date(calendar[0], calendar[1]-1, calendar[2], calendar[3], calendar[4])
+        // // Date(year, month, day, hours, minutes, seconds, milliseconds)
+        // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}
+        // // console.log(calendar)
+        // // console.log(event.toLocaleDateString(undefined, options))
+        // return event.toLocaleDateString(undefined, options)
+        const date = new Date(time)
+        return format(date, "EEEE, MM/dd/yyyy h:mm aa")
     }
 
     const handleToggleLfg = () => {
-        console.log(!lfg)
+        // console.log(!lfg)
         fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${params.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                lfg: !lfg
+                lfg: !currentUser.lfg
             })
         })
         .then(resp => resp.json())
         .then(updObj => {
-            console.log(updObj)
-            setLfg(updObj.lfg)
+            // console.log(updObj)
+            // setLfg(updObj.lfg)
             setCurrentUser({
                 ...currentUser,
                 lfg: updObj.lfg
@@ -234,13 +240,39 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     }
 
     const reviewed = (session) => {
-        console.log(session)
+        // console.log(session)
         const foundSession = session.reviews.find(review => {
             return review.reviewer.username === currentUser.username
         })
-        console.log(foundSession)
+        // console.log(foundSession)
         return foundSession
     }
+
+    const countTags = () => {
+        const hash = {}
+        const array = []
+        const tags = user.reviews_as_reviewee.map(review => review.tags)
+
+        for (const tagArray of tags) {
+            for (let j=0; j < tagArray.length; j++) {
+                if(hash[tagArray[j].name]){
+                    hash[tagArray[j].name] += 1
+                } else {
+                    hash[tagArray[j].name] = 1
+                }
+            }
+        }
+
+
+        for(const prop in hash) {
+            array.push({[prop]: hash[prop]})
+        }
+
+        console.log(hash)
+        console.log(array)
+        return array
+    }
+
 
     if (!isLoaded) return <h2>Loading...</h2>
     
@@ -274,7 +306,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 <FormControlLabel
                                     control={
                                         <Switch
-                                            checked={lfg}
+                                            checked={currentUser.lfg}
                                             onChange={handleToggleLfg}
                                             name="lfg"
                                             inputProps={{ 'aria-label': 'secondary checkbox' }}
@@ -300,14 +332,13 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 Comments <Typography display="inline" color="textSecondary">({user.reviews_as_reviewee.length})</Typography>
                             </Typography>
                             <Typography variant={"h6"} display="inline">
-                                {user.avg} Score<br/>
-                                {/* {user.reviews_as_reviewee.length === 0 ? "0 Score" :
-                                (user.reviews_as_reviewee
-                                    .reduce((sum, review) => sum + review.rating, 0) / user.reviews_as_reviewee.length)
-                                    .toFixed(2)
-                                } */}
+                                {user.avg} Score
                             </Typography>
                         </Grid>
+                        <Box>
+                            {countTags().map(tagObj => <Chip color="secondary" clickable size="small"label={`${Object.keys(tagObj)} (${Object.values(tagObj)})`} className={classes.chip}/>)}
+                            {/* {<Chip color="secondary" clickable size="small"label={tag.name} className={classes.chip}/>} */}
+                        </Box>
                         {/* <Typography variant={"h4"} paragraph>Reviews</Typography> */}
                         {user.reviews_as_reviewee.slice(0,showMore).map(review => {
                             return (
@@ -328,6 +359,8 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                                 <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
                                                 <Divider variant="middle"/>
                                                 <Typography paragraph className={classes.section2}>{review.contents}</Typography>
+                                                <Typography variant={"subtitle2"} className={classes.section2} color="textSecondary">{review.game}</Typography>
+                                                {review.tags.map(tag => <Chip color="secondary" clickable size="small"label={tag.name} className={classes.chip}/>)}
                                             </CardContent>
                                         </div>
                                     </Card>
@@ -404,7 +437,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 {playSessions.filter(session => {
                                     return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                                 }).filter(session => {
-                                    return session.sender_id === currentUser.id && session.is_accepted === true
+                                    return session.sender_id === currentUser.id && session.is_accepted === true && reviewed(session) === undefined
                                 }).map(session => {
                                     return <Paper key={session.id} className={classes.border} >
                                             <Box p={2} m={1}>
@@ -432,7 +465,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 {playSessions.filter(session => {
                                     return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                                 }).filter(session => {
-                                    return session.receiver_id === currentUser.id && session.is_accepted === true
+                                    return session.receiver_id === currentUser.id && session.is_accepted === true && reviewed(session) === undefined
                                 }).map(session => {
                                     return <Paper key={session.id} className={classes.border}>
                                             <Box p={2} m={1}>

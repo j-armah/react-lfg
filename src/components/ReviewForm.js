@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +8,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import TagBox from './TagBox'
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,11 +35,44 @@ const useStyles = makeStyles((theme) => ({
 function ReviewForm({ currentUser, sessionId, reviewee }) {
     const [contents, setContents] = useState("")
     const [rating, setRating] = useState(1)
+    const [tags, setTags] = useState([])
+    const [addedTags, setAddedTags] = useState([])
     const history = useHistory()
     const classes = useStyles()
+    const [state, setState] = useState({
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: false,
+        9: false,
+        10: false,
+    });
+
 
     console.log(rating)
     console.log(reviewee)
+    console.log(state)
+
+    
+
+
+    // const tagBoxes = tags.map(tag => <TagBox key={tag.id} tag={tag} addedTags={addedTags} setTags/>)
+
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.checked });
+    };
+
+
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/tags`)
+            .then(resp => resp.json())
+            .then(data => {
+                setTags(data)
+            })
+    }, [])
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -47,7 +85,18 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
             play_session_id: parseInt(sessionId)
         }
 
+        let tagsArray = []
+
+        for (const [key, value] of Object.entries(state)) {
+            if (value === true) {
+                tagsArray = [...tagsArray, parseInt(key)]
+            }
+        }
+
         console.log(reviewData)
+        console.log(tagsArray)
+
+
         fetch(`${process.env.REACT_APP_API_BASE_URL}/reviews`, {
             method: 'POST',
             headers: {
@@ -58,11 +107,28 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
         .then(resp => resp.json())
         .then(newReviewObj => {
             console.log(newReviewObj)
-            if (newReviewObj.id === null) {
-                alert("Can only review a user once!")
-            } else {
-                history.push(`/users/${currentUser.id}`)
+            // if (newReviewObj.id === null) {
+            //     alert("Can only review a user once!")
+            // } else {
+            //     history.push(`/users/${currentUser.id}`)
+            // }
+            for (const id of tagsArray) {
+                fetch(`${process.env.REACT_APP_API_BASE_URL}/review_tags`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    }, 
+                    body: JSON.stringify({
+                        review_id: newReviewObj.id,
+                        tag_id: id
+                    })
+                })
+                .then(resp => resp.json())
+                .then(reviewTag => {
+                    console.log(reviewTag)
+                })
             }
+            console.log("done")
         })
     }
     return (
@@ -83,13 +149,7 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
                                 Review {reviewee.username}<br/>
                                 <textarea name="content" value={contents} onChange ={event => setContents(event.target.value)}/>
                                 <br/>
-                                {/* Rate: <select name="rating" id="rating" form="review" value={rating} onChange={event => setRating(event.target.value)}>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>              
-                                </select> */}
+
                                 <>
                                 <FormLabel> Rate: </FormLabel>
                                 <Rating
@@ -102,6 +162,45 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
                                 />
                                 </>
                             </label>
+                            <Box>
+                                {/* {tagBoxes}  */}
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={2} />}
+                                    label={"Chill"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={3} />}
+                                    label={"Tilt-proof"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={4} />}
+                                    label={"Team player"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={5} />}
+                                    label={"Friendly"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={6} />}
+                                    label={"Interactive"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={7} />}
+                                    label={"Strategic"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={8} />}
+                                    label={"Humorous"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={9} />}
+                                    label={"Creative"}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={state.id} onChange={handleChange} name={10} />}
+                                    label={"Carry"}
+                                />
+                            </Box>
                             <Button variant="contained" color="secondary" onClick={handleSubmit} className="submit-button">Submit Review</Button>
                         </FormControl>
                     </CardContent>
