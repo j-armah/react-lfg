@@ -77,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     gameBanner: {
+        marginTop: "15px",
         height: "40vh",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -85,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     },
     userGameDetail: {
         // position: 'absolute',
-        marginTop: -130,
+        marginTop: -140,
         zIndex: 1,
         height: "60%"
     },
@@ -94,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
     },
     boxBanner: {
         height: "60%",
-        positin: "fixed",
+        // positin: "fixed",
         // marginLeft: "calc(100% - 1600px)",
         // right: "20%",
         // marginLeft: "100px",
@@ -118,6 +119,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
     const [user, setUser] = useState(null)
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
+    const [showMore, setShowMore] = useState(3)
     // const [modalIsOpen, setIsOpen] = React.useState(false);
     //var subtitle;
     const params = useParams()
@@ -273,7 +275,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                             } Score */}
                         </Typography>
                     </Grid>
-                    {user.reviews_as_reviewee.map(review => {
+                    {user.reviews_as_reviewee.slice(0,showMore).map(review => {
                         return (
                             <Box mt={2} key={review.id} >
                                 <Card className={classes.rootCard} >
@@ -299,6 +301,12 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                         )
                     })}
                 </Grid>
+                {user.reviews_as_reviewee.length <= 3 ? null :
+                <Grid>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <Button size="small" color="secondary" onClick={() => setShowMore(showMore + 3)}> + See More </Button>
+                    </Box>
+                </Grid>}
             </Grid>
             <Grid item xs={3} component={"div"} className={classes.userGameDetail}>
                     <img height="100%" width="100%" className={classes.image} src={user.avatar} alt={user.username}/>

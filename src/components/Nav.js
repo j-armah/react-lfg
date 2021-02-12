@@ -4,6 +4,7 @@ import { Button, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -92,13 +93,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Nav({ currentUser, handleLogout }) {
+function Nav({ currentUser, handleLogout, users }) {
     const [search, setSearch] = useState("")
     const [anchorEl, setAnchorEl] = useState(null)
     const history = useHistory()
     const classes = useStyles()
     const location = useLocation()
     const isMenuOpen = Boolean(anchorEl)
+
+    //  test 
+    const [value, setValue] = useState(null);
+    const [inputValue, setInputValue] = React.useState('');
 
     const handleProfileMenuOpen = (event) => {
         // console.log(event.currentTarget)
@@ -140,11 +145,21 @@ function Nav({ currentUser, handleLogout }) {
             <MenuItem onClick={handleLogoutClose}>Logout</MenuItem> 
         </Menu>
     );
-
+    
+    // console.log(value)
     const handleSearch = (event) => {
         event.preventDefault()
 
-        console.log(search)
+        // console.log(inputValue)
+        // console.log(value)
+        // debugger
+        if (value !== null) {
+            // console.log(value)
+            const searchUser = users.find(user => value === user.username)
+            history.push(`/users/${searchUser.id}`)
+            setValue(null)
+        }
+        
     }
     
     // console.log(search)
@@ -173,7 +188,7 @@ function Nav({ currentUser, handleLogout }) {
         
         <div className={classes.grow} />
         <div className={classes.search}>
-                <div className={classes.searchIcon}>
+                {/* <div className={classes.searchIcon}>
                     <SearchIcon />
                 </div>
                 <InputBase
@@ -183,10 +198,40 @@ function Nav({ currentUser, handleLogout }) {
                     input: classes.inputInput,
                 }}
                 inputProps={{ 'aria-label': 'search' }}
+                /> */}
+            <form onSubmit={handleSearch}>
+                <Autocomplete
+                    value={value}
+                    onChange={(event, newValue) => {
+                    setValue(newValue);
+                    }}
+                    inputValue={inputValue}
+                    onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue);
+                    }}
+                    id="search-users"
+                    options={users.sort((userA, userB) => 
+                        userB.avg - userA.avg
+                        ).map((user) => 
+                        user.username
+                    )}
+        
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} 
+                    // InputProps={{
+                    //     startAdornment: (
+                    //     <InputAdornment position="start">
+                    //         <SearchIcon />
+                    //     </InputAdornment>
+                    //     ),
+                    // }}    
+                    label="Search users..." variant="filled" />
+                    }   
                 />
+            </form>
                 {/* <form className={classes.form} onSubmit={handleSearch}>
                 <Autocomplete
-                    freeSolo
+                    // freeSolo
                     fullWidth
                     autoSelect={true}
                     id="free-solo-2-demo"
@@ -215,6 +260,7 @@ function Nav({ currentUser, handleLogout }) {
                     )}
                 />
                 </form> */}
+                
         </div>
         
         

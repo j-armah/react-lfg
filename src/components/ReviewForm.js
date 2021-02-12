@@ -43,7 +43,7 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
             reviewer_id: parseInt(currentUser.id),
             reviewee_id: parseInt(reviewee.id),
             contents: contents,
-            rating: parseInt(rating),
+            rating: parseFloat(rating),
             play_session_id: parseInt(sessionId)
         }
 

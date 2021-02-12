@@ -85,6 +85,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     const [user, setUser] = useState(null)
     const [playSessions, setPlaySessions] = useState([])
     const [open, setOpen] = useState(false)
+    const [showMore, setShowMore] = useState(3)
     // const [reviews, setReviews] = useState([])
     const [lfg, setLfg] = useState(currentUser.lfg)
 
@@ -232,6 +233,15 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
         })
     }
 
+    const reviewed = (session) => {
+        console.log(session)
+        const foundSession = session.reviews.find(review => {
+            return review.reviewer.username === currentUser.username
+        })
+        console.log(foundSession)
+        return foundSession
+    }
+
     if (!isLoaded) return <h2>Loading...</h2>
     
     return (
@@ -299,7 +309,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                             </Typography>
                         </Grid>
                         {/* <Typography variant={"h4"} paragraph>Reviews</Typography> */}
-                        {user.reviews_as_reviewee.map(review => {
+                        {user.reviews_as_reviewee.slice(0,showMore).map(review => {
                             return (
                                 <Box mt={2} key={review.id}>
                                     <Card className={classes.root} >
@@ -322,25 +332,15 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                         </div>
                                     </Card>
                                 </Box>
-                            
-
-                            // <Paper key={review.id}>
-                            //     <Box p={2} m={1}>
-                            //         <Box display="flex" alignItems="center">
-                            //             <Avatar src={review.reviewer.avatar} className={classes.large}/>
-                            //             <Typography className={classes.section2} variant={"h6"}>
-                            //                 {review.reviewer.username}
-                            //             </Typography>
-                            //         </Box>
-                                    
-                            //         <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
-                            //         <Divider variant="middle"/>
-                            //         <Typography paragraph className={classes.section2}>{review.contents}</Typography>
-                            //     </Box>
-                            // </Paper>
                             )
                         })}
                     </Grid>
+                    {user.reviews_as_reviewee.length <= 3 ? null :
+                    <Grid>
+                        <Box display="flex" justifyContent="center" alignItems="center">
+                            <Button size="small" color="secondary" onClick={() => setShowMore(showMore + 3)}> + See More </Button>
+                        </Box>
+                    </Grid>}
                 </Grid>     
             </Grid>
             <Grid container spacing={4} item xs={6} direction="column" className={classes.userGamesPlayed}>
@@ -422,7 +422,8 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                                 {/* <div className="reviewer-div">
                                                     <ReviewForm currentUser={currentUser} user={session.receiver}/>
                                                 </div> */}
-                                                <Button variant="outlined" onClick={() => handleReview(session.receiver, session.id)}>Review</Button>
+                                                { reviewed(session) !== undefined ? null : 
+                                                <Button variant="outlined" onClick={() => handleReview(session.receiver, session.id)}>Review</Button>}
                                                 <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button>
                                             </Box>
                                         </Paper>
@@ -447,7 +448,8 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                             {/* <div className="reviewer-div">
                                                 <ReviewForm currentUser={currentUser} user={session.sender}/>
                                             </div> */}
-                                            <Button variant="outlined" onClick={() => handleReview(session.sender, session.id)}>Review</Button>
+                                            { reviewed(session) !== undefined ? null :
+                                            <Button variant="outlined" onClick={() => handleReview(session.sender, session.id)}>Review</Button>}
                                             <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button>
                                             </Box>
                                         </Paper>
