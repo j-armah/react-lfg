@@ -100,6 +100,7 @@ function SignUp({ firstGame, handleSignUp }) {
           });
     }
 
+    if (!firstGame) return <h1>Loading...</h1>
     return (
       <Grid container component="main" className={classes.root}>
       <CssBaseline />

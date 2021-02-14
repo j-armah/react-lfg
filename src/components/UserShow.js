@@ -337,7 +337,6 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                         </Grid>
                         <Box>
                             {countTags().map(tagObj => <Chip color="secondary" clickable size="small"label={`${Object.keys(tagObj)} (${Object.values(tagObj)})`} className={classes.chip}/>)}
-                            {/* {<Chip color="secondary" clickable size="small"label={tag.name} className={classes.chip}/>} */}
                         </Box>
                         {/* <Typography variant={"h4"} paragraph>Reviews</Typography> */}
                         {user.reviews_as_reviewee.slice(0,showMore).map(review => {
@@ -410,7 +409,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                             }
                         </div>
                         <div className="received-pending">
-                        <Typography variant={"h5"} paragraph> Recieved </Typography>
+                        <Typography variant={"h5"} paragraph> Received Request</Typography>
                             {playSessions.filter(session => {
                                 return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                             }).filter(session => {
@@ -457,7 +456,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                                 </div> */}
                                                 { reviewed(session) !== undefined ? null : 
                                                 <Button variant="outlined" onClick={() => handleReview(session.receiver, session.id)}>Review</Button>}
-                                                <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button>
+                                                {/* <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button> */}
                                             </Box>
                                         </Paper>
                                     })
@@ -483,7 +482,7 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                             </div> */}
                                             { reviewed(session) !== undefined ? null :
                                             <Button variant="outlined" onClick={() => handleReview(session.sender, session.id)}>Review</Button>}
-                                            <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button>
+                                            {/* <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button> */}
                                             </Box>
                                         </Paper>
                                     })
@@ -523,8 +522,6 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                     <EditUserInfo user={currentUser} setUser={setUser}/>
             </div>} */}
             <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
                 className={classes.modal}
                 open={open}
                 onClose={handleClose}

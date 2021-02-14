@@ -4,6 +4,7 @@ import { useParams, Link, useHistory } from 'react-router-dom';
 import PlaySessionForm from './PlaySessionForm';
 import EditUserGameDetail from './EditUserGameDetail';
 import GameCard from './GameCard'
+import UserGameCard from './UserGameCard'
 import { Grid, Typography, Button, Box, Divider, Card } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
@@ -191,8 +192,8 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
             array.push({[prop]: hash[prop]})
         }
 
-        console.log(hash)
-        console.log(array)
+        // console.log(hash)
+        // console.log(array)
         return array
     }
 
@@ -358,6 +359,13 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                             <Typography paragraph variant={"h3"}>{user.username}</Typography>
                         </Link>
 
+
+                    <Box>
+                        <Typography variant={"h4"}>Other Games</Typography>
+                        <Grid container item xs={12} spacing={2} className={classes.gameCards} >
+                            {user.user_games.slice(0,3).map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
+                        </Grid>
+                    </Box>
                     {!currentUser ? 
                     null  
                     : currentUser.id === userGame.user.id ? 

@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function Login({ setCurrentUser, firstGame, handleLogin }) {
+function Login({ firstGame, handleLogin }) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [errors, setErrors] = useState("")
@@ -94,6 +94,7 @@ function Login({ setCurrentUser, firstGame, handleLogin }) {
 
     console.log(firstGame)
 
+    if (!firstGame) return <h1>Loading...</h1>
     return (
       <Grid container component="main" className={classes.root}>
       <CssBaseline />

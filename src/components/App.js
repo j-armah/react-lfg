@@ -7,6 +7,7 @@ import Login from './Login'
 import AddGame from './AddGame'
 import UserGameDetail from './UserGameDetail'
 import SignUp from './SignUp'
+import Dashboard from './Dashboard'
 import ReviewForm from './ReviewForm'
 import { Grid, Box } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -149,9 +150,12 @@ function App() {
         .then((r) => r.json())
         .then((user) => {
           setCurrentUser(user);
-          // setIsLoaded(true)
+          setIsLoaded(true)
         });
+    } else {
+      setIsLoaded(true)
     }
+    
   }, []);
 
   useEffect(() => {
@@ -160,7 +164,7 @@ function App() {
       .then(data => {
         // console.log(data)
         setGames(data)
-        setIsLoaded(true)
+        // setIsLoaded(true)
 
       })
   }, [])
@@ -182,7 +186,7 @@ function App() {
   }, [])
 
 
-  console.log(currentUser)
+  // console.log(currentUser)
 
   // if (!isLoaded) return <h1>Loading</h1>
   if (!isLoaded) return (
@@ -229,6 +233,9 @@ function App() {
               <Route exact path="/inbox">
                 <Inbox user={currentUser} otherUser={otherUser}/>
               </Route>
+              <Route exact path="/dashboard">
+                <Dashboard currentUser={currentUser}/>
+              </Route>
               
             </Grid>
           {/* <Grid item xs={false} sm={1} /> */}
@@ -244,9 +251,10 @@ function App() {
 
     {location.pathname === '/' || location.pathname === '/signup'? null :
     <div>
+      {!currentUser ? null : 
       <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleClickChat}>
         <CommentIcon />
-      </Fab>
+      </Fab>}
       <Zoom in={trigger}>
         <div onClick={handleClick} role="presentation" className={classes.root}>
           <Fab onClick={handleClick} color="secondary" size="small" aria-label="scroll back to top">
@@ -270,7 +278,14 @@ function App() {
           horizontal: 'left',
         }}
       >
-        <Box p={1} bgcolor="transparent" mx="auto" justifyContent="center" alignItems="center" className={classes.chatBox}>
+        <Box 
+          p={1} 
+          bgcolor="transparent" 
+          mx="auto" 
+          justifyContent="center" 
+          alignItems="center" 
+          className={classes.chatBox}
+        >
           <InboxComponent user={currentUser} otherUser={otherUser}/>
         </Box>
       </Popover>

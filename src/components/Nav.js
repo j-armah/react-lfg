@@ -125,6 +125,11 @@ function Nav({ currentUser, handleLogout, users }) {
         setAnchorEl(null);
     };
 
+    const handleMenuCloseDash = () => {
+        history.push(`/dashboard`)
+        setAnchorEl(null);
+    };
+
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
@@ -142,6 +147,7 @@ function Nav({ currentUser, handleLogout, users }) {
         >
             <MenuItem onClick={handleMenuCloseProfile}>Profile</MenuItem>
             <MenuItem onClick={handleMenuCloseInbox}>Inbox</MenuItem>
+            <MenuItem onClick={handleMenuCloseDash}>Dashboard</MenuItem>
             <MenuItem onClick={handleLogoutClose}>Logout</MenuItem> 
         </Menu>
     );
