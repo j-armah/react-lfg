@@ -18,6 +18,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import Popover from '@material-ui/core/Popover';
 import Chip from '@material-ui/core/Chip';
+import UserGameDetailCard from './UserGameDetailCard'
+import GridList from '@material-ui/core/GridList';
+import Draggable from 'react-draggable';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -115,6 +119,11 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: theme.spacing(0.5),
+    },
+    gridList: {
+        flexWrap: 'nowrap',
+        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+        transform: 'translateZ(0)',
     },
 }));
 
@@ -361,10 +370,15 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
 
 
                     <Box>
-                        <Typography variant={"h4"}>Other Games</Typography>
-                        <Grid container item xs={12} spacing={2} className={classes.gameCards} >
+                        <Typography paragraph variant={"h4"}>Other Games</Typography>
+                        {/* <Grid container item xs={12} spacing={2} className={classes.gameCards} >
                             {user.user_games.slice(0,3).map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
-                        </Grid>
+                        </Grid> */}
+                        
+                            <GridList className={classes.gridList} cols={2.5}>
+                                {user.user_games.map(userGame => <UserGameDetailCard key={userGame.id} userGame={userGame} />)}
+                            </GridList>
+                        
                     </Box>
                     {!currentUser ? 
                     null  

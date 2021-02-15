@@ -8,7 +8,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import TagBox from './TagBox'
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
@@ -57,10 +56,6 @@ function ReviewForm({ currentUser, sessionId, reviewee }) {
     console.log(state)
 
     
-
-
-    // const tagBoxes = tags.map(tag => <TagBox key={tag.id} tag={tag} addedTags={addedTags} setTags/>)
-
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
