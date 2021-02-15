@@ -20,7 +20,7 @@ import Popover from '@material-ui/core/Popover';
 import Chip from '@material-ui/core/Chip';
 import UserGameDetailCard from './UserGameDetailCard'
 import GridList from '@material-ui/core/GridList';
-import Draggable from 'react-draggable';
+// import Draggable from 'react-draggable';
 
 
 
@@ -132,14 +132,22 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
     const [userGame, setUserGame] = useState(null)
     const [user, setUser] = useState(null)
     const [open, setOpen] = useState(false)
+    // const [openEdit, setOpenEdit] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const [showMore, setShowMore] = useState(3)
     const [userGameReviews, setUserGameReviews] = useState([])
-    // const [modalIsOpen, setIsOpen] = React.useState(false);
-    //var subtitle;
     const params = useParams()
     const classes = useStyles()
     const history = useHistory()
+    const [anchorElEdit, setAnchorElEdit] = useState(null);
+
+    const handleClickEdit = (event) => {
+      setAnchorElEdit(event.currentTarget);
+    };
+  
+    const handleCloseEdit = () => {
+      setAnchorElEdit(null);
+    };
 
     const handleOpen = () => {
         setOpen(true);
@@ -159,6 +167,9 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
 
     const openPop = Boolean(anchorEl);
     const id = openPop ? 'simple-popover' : undefined;
+
+    const openEdit = Boolean(anchorElEdit);
+    const idEdit = openEdit ? 'simple-popover' : undefined;
     
     const handleChat = (event) => {
         // console.log(user)
@@ -354,7 +365,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                         )
                     })}
                 </Grid>
-                {user.reviews_as_reviewee.length <= 3 ? null :
+                {userGameReviews.length <= 3 ? null :
                 <Box width="100%">
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <Button size="small" color="secondary" onClick={() => setShowMore(showMore + 3)}> + See More </Button>
@@ -383,10 +394,31 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                     {!currentUser ? 
                     null  
                     : currentUser.id === userGame.user.id ? 
-                    <div>
-                        <Button onClick={handleDelete} className={classes.section2} color="secondary" variant="contained"> Remove this game</Button>
-                        <EditUserGameDetail userGame={userGame} setUserGame={setUserGame}/>
-                    </div>
+                    <Box>
+                        <div>
+                            <Button onClick={handleDelete} className={classes.section2} color="secondary" variant="contained"> Remove this game</Button>
+                            <Button onClick={handleClickEdit} color="secondary" variant="contained">Edit Game Details</Button>
+                            <Popover
+                                id={idEdit}
+                                open={openEdit}
+                                anchorEl={anchorElEdit}
+                                onClose={handleCloseEdit}
+                                anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                                }}
+                                transformOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                                }}
+                            >
+                                <Box>
+                                    <EditUserGameDetail userGame={userGame} setUserGame={setUserGame} handleCloseEdit={handleCloseEdit}/>
+                                </Box> 
+                            </Popover>
+                            
+                        </div>
+                    </Box>
                     :
                     <div className="modal-button">
                         {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
@@ -396,7 +428,8 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                         <Button onClick={handleChat}>
                             Chat
                         </Button>
-                    </div>}
+                    </div>
+                    }
             </Grid>
             {/* SideBar */}
             <Grid item xs={false} sm={1} /> {}
@@ -418,6 +451,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                 </div>
                 </Fade>
             </Modal>
+
         </Grid>
     )
 }
