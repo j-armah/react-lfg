@@ -92,11 +92,12 @@ function SentComments({ review, handleEdit, deleteReview }) {
                     </CardMedia>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
+                            <Typography className={classes.section2} variant="subtitle" color="textSecondary">to</Typography>
                             <Typography className={classes.section2} variant={"h6"}>
                                 {review.reviewee.username}
                             </Typography>
                             <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
-                            <Divider variant="middle"/>
+                            <Divider variant="middle"/>              
                             <Typography paragraph className={classes.section2}>{review.contents}</Typography>
                             <Typography variant={"subtitle2"} className={classes.section2} color="textSecondary">{review.game}</Typography>
                             {review.tags.map(tag => <Chip color="secondary" clickable size="small"label={tag.name} className={classes.chip}/>)}

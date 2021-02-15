@@ -431,62 +431,77 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
                 </Box>}
             </Grid>
             <Grid item xs={3} component={"div"} className={classes.userGameDetail}>
+                {!currentUser ? 
+                null  
+                : currentUser.id === userGame.user.id ? 
+                <Box display="flex" justifyContent="space-between" alignContent="center" m={2}> 
+                {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
+                
+                    <Button onClick={handleChat} disabled className={classes.chatBtn}>
+                        <ChatIcon />
+                    </Button>
+                    <Button className={classes.gameBtn} color="secondary" variant="contained" type="button" size="small" disabled onClick={handleOpen}>
+                        Let's Game
+                    </Button>
+                </Box>   
+                :
                 <Box display="flex" justifyContent="space-between" alignContent="center" m={2}> 
                     {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
+                    
                     <Button onClick={handleChat} className={classes.chatBtn}>
                         <ChatIcon />
                     </Button>
                     <Button className={classes.gameBtn} color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
                         Let's Game
                     </Button>
-                </Box>
-                    <img height="100%" width="100%" className={classes.image} src={user.avatar} alt={user.username}/>
-                     
-                    <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
-                        <Typography paragraph variant={"h3"}>{user.username}</Typography>
-                    </Link>
+                </Box>}
 
-
-                    <Box>
-                        <Typography paragraph variant={"h4"}>Other Games</Typography>
-                        {/* <Grid container item xs={12} spacing={2} className={classes.gameCards} >
-                            {user.user_games.slice(0,3).map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
-                        </Grid> */}
-                        
-                            <GridList className={classes.gridList} cols={2.5}>
-                                {user.user_games.map(userGame => <UserGameDetailCard key={userGame.id} userGame={userGame} />)}
-                            </GridList>
-                        
-                    </Box>
-                    {!currentUser ? 
-                    null  
-                    : currentUser.id === userGame.user.id ? 
-                    <Box>
-                        <div>
-                            <Button onClick={handleDelete} className={classes.section2} color="secondary" variant="contained"> Remove this game</Button>
-                            <Button onClick={handleClickEdit} color="secondary" variant="contained">Edit Game Details</Button>
-                            <Popover
-                                id={idEdit}
-                                open={openEdit}
-                                anchorEl={anchorElEdit}
-                                onClose={handleCloseEdit}
-                                anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                                }}
-                                transformOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                                }}
-                            >
-                                <Box>
-                                    <EditUserGameDetail userGame={userGame} setUserGame={setUserGame} handleCloseEdit={handleCloseEdit}/>
-                                </Box> 
-                            </Popover>
-                            
-                        </div>
-                    </Box> : null}
+                <img height="100%" width="100%" className={classes.image} src={user.avatar} alt={user.username}/>
                     
+                <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
+                    <Typography paragraph variant={"h3"}>{user.username}</Typography>
+                </Link>
+
+
+                <Box>
+                    <Typography paragraph variant={"h4"}>Other Games</Typography>
+                    {/* <Grid container item xs={12} spacing={2} className={classes.gameCards} >
+                        {user.user_games.slice(0,3).map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
+                    </Grid> */}
+                    <GridList className={classes.gridList} cols={2.5}>
+                        {user.user_games.map(userGame => <UserGameDetailCard key={userGame.id} userGame={userGame} />)}
+                    </GridList>
+                    
+                </Box>
+                {!currentUser ? 
+                null  
+                : currentUser.id === userGame.user.id ? 
+                <Box>
+                    <div>
+                        <Button onClick={handleDelete} className={classes.section2} color="secondary" variant="contained"> Remove this game</Button>
+                        <Button onClick={handleClickEdit} color="secondary" variant="contained">Edit Game Details</Button>
+                        <Popover
+                            id={idEdit}
+                            open={openEdit}
+                            anchorEl={anchorElEdit}
+                            onClose={handleCloseEdit}
+                            anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                            }}
+                            transformOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                            }}
+                        >
+                            <Box>
+                                <EditUserGameDetail userGame={userGame} setUserGame={setUserGame} handleCloseEdit={handleCloseEdit}/>
+                            </Box> 
+                        </Popover>
+                        
+                    </div>
+                </Box> : null}
+                
             </Grid>
             {/* SideBar */}
             <Grid item xs={false} sm={1} /> {}

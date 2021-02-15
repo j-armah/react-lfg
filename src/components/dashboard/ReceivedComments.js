@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     chip: {
         margin: theme.spacing(0.5),
     },
+    section3: {
+        marginLeft: theme.spacing(1),
+    }
   }));
 
 
@@ -87,8 +90,9 @@ function ReceivedComments({ review }) {
                     </CardMedia>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
+                            <Typography className={classes.section3} color="textSecondary" variant={"subtitle"}>from</Typography>
                             <Typography className={classes.section2} variant={"h6"}>
-                                {review.reviewee.username}
+                                 {review.reviewer.username}
                             </Typography>
                             <Rating className={classes.section2} name="read-only" precision={0.5} value={review.rating} size="small" readOnly />
                             <Divider variant="middle"/>
