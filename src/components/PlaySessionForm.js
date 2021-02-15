@@ -1,9 +1,11 @@
 import React , { useState } from 'react'
+// import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 // import DateTimePicker from 'react-datetime-picker'
 import { format } from 'date-fns';
 // import DateFnsUtils from '@date-io/date-fns'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, Typography, Grid, TextField } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import { FormControl, Button, FormLabel, Typography, Grid, TextField, Box, Paper } from '@material-ui/core';
 // import DateTimePicker from '@material-ui/lab/DateTimePicker';
 // import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 // import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
@@ -20,7 +22,20 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         margin: theme.spacing(2),
-    }
+    },
+    large: {
+        height: theme.spacing(35),
+        width: theme.spacing(35)
+    },
+    submit: {
+        margin: theme.spacing(2)
+    },
+    date: {
+        // margin: theme.spacing
+    },
+    // containerBox: {
+    //     borderTopRightRadius: "40px"
+    // }
 }));
 
 function PlaySessionForm({ currentUser, userGame, setOpen}) {
@@ -62,17 +77,43 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
     }
 
     return (
-        <Grid container className={classes.root} spacing={2}>
-            <Grid item xs={6}>
-                <div>
-                    <Typography paragraph>Request to {userGame.user.username}</Typography>
-                    <img height="250px" src={userGame.user.avatar} alt={userGame.user.username} className="request-form-img"/>
-                </div>
-            </Grid>  
-            <Grid item xs={6}>
-            <FormControl onSubmit={handleSubmit}>
-                
-                <FormLabel >Start Time: </FormLabel>
+        <Box className={classes.containerBox}>
+            <Grid container className={classes.root} spacing={2}>
+                <Grid item xs={12}>
+                    <Box display="flex" justifyContent="center"> <Typography paragraph variant={"h5"}>Request to {userGame.user.username}</Typography></Box>
+                    <Box display="flex" justifyContent="center">
+                        
+                        <Avatar src={userGame.user.avatar} alt={userGame.user.username} className={classes.large}/>
+                    </Box>
+                </Grid>  
+                <Grid item xs={12}>
+                    <Box display="flex" justifyContent="center" className={classes.date}>
+                    <FormControl onSubmit={handleSubmit}>
+                        
+                        <FormLabel >Start Time: </FormLabel>
+
+                            <TextField
+                                id="datetime-local"
+                                // label="Next appointment"
+                                type="datetime-local"
+                                // defaultValue={format(Date.now, 'YYYY-MM-DD[T]HH:mmZZ')}
+                                style={{ width: 250 }}
+                                InputLabelProps={{
+                                shrink: true,
+                                }}
+                            />
+                        <Button color="secondary" variant="contained" onClick={handleSubmit} className={classes.submit}> Send Request </Button>
+                    </FormControl>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Box>
+    )
+}
+
+export default PlaySessionForm
+
+
 {/* 
                 <DateTimePicker
                     onChange={setDateTime}
@@ -89,21 +130,3 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
                         }}
                     />
                     </LocalizationProvider> */}
-                    <TextField
-                        id="datetime-local"
-                        label="Next appointment"
-                        type="datetime-local"
-                        // defaultValue={format(Date.now, 'YYYY-MM-DD[T]HH:mmZZ')}
-                        style={{ width: 250 }}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    />
-                <Button color="secondary" variant="contained" onClick={handleSubmit} > Send Request </Button>
-            </FormControl>
-            </Grid>
-        </Grid>
-    )
-}
-
-export default PlaySessionForm

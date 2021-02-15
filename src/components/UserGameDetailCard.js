@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Paper } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     title: {

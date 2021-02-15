@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import { Grid, Box } from '@material-ui/core'
 import SentComments from './dashboard/SentComments';
 import ReceivedComments from './dashboard/ReceivedComments';

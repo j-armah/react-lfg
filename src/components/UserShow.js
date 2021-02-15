@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import EditUserInfo from './EditUserInfo'
-// import ReviewForm from './ReviewForm'
+import ReviewForm from './ReviewForm'
 import UserGameCard from './UserGameCard'
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button, Box, Card, Divider } from '@material-ui/core';
@@ -19,6 +19,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import { format } from 'date-fns'
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -42,8 +46,13 @@ const useStyles = makeStyles((theme) => ({
         // margin: "0px"
     },
     gameCards: {
-        margin: "10px"
+        margin: "10px",
+        // height: "100%",
+        overflow: "auto",
     },
+    // otherGames: {
+    //     height: "20vh",
+    // },
     card: {
         width: "70%",
         height: "100%"
@@ -84,13 +93,18 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0.5),
     },
   }));
-
-function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
+//   , setReviewee 
+function UserShow({ currentUser, setSessionId, setCurrentUser}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [user, setUser] = useState(null)
     const [playSessions, setPlaySessions] = useState([])
     const [open, setOpen] = useState(false)
+    const [openReview, setOpenReview] = useState(false)
     const [showMore, setShowMore] = useState(3)
+    const [moreGame, setMoreGame] = useState(9)
+    const [tab, setTab] = useState(0)
+    const [session, setSession] = useState(null)
+    const [reviewee, setReviewee] = useState(null)
     // const [reviews, setReviews] = useState([])
     // const [lfg, setLfg] = useState(currentUser)
 
@@ -106,6 +120,19 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleOpenReview = () => {
+        setOpenReview(true);
+    };
+    
+    const handleCloseReview = () => {
+        setOpenReview(false);
+    };
+
+    const handleTabChange = (event, newValue) => {
+        setTab(newValue);
+    };
+
 
 
     function handleAccept(id) {
@@ -172,11 +199,25 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
         })
     }
 
-    function handleReview(reviewee, id) {
+    function handleReview(reviewee, session) {
         setReviewee(reviewee)
-        setSessionId(id)
-        history.push("/reviews/new")
+        // setSessionId(id)
+        setSession(session)
+        handleOpenReview()
+
+        // history.push("/reviews/new")
     }
+
+    const updateSession = (newSession, review) => {
+        const updatedSessions = playSessions.map(session => {
+            if (session.id === newSession.id) {
+                return {...session, reviews: [...session.reviews, review] }
+            } else {
+                return session
+            }
+        })
+        setPlaySessions(updatedSessions)
+    } 
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${params.id}`)
@@ -376,17 +417,28 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                 </Grid>     
             </Grid>
             <Grid container spacing={4} item xs={6} direction="column" className={classes.userGamesPlayed}>
-                <Grid item xs={12} height={"10px"} component={"div"} className="other-games">
+                <Grid item xs={12} height={"10px"} component={"div"} className={classes.otherGames}>
                     <Typography variant={"h4"}>Other Games</Typography>
                     <Grid container item xs={12} spacing={2} className={classes.gameCards} >
-                        {user.user_games.map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
+                        {user.user_games.slice(0, moreGame).map(userGame => <UserGameCard key={userGame.id} userGame={userGame} />)}
                     </Grid>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        {moreGame < user.user_games.length ? <Button size="small" color="secondary" onClick={() => setMoreGame(moreGame + 9)}> + See More </Button> : <Typography color="secondary">No More Games</Typography>}
+                    </Box>
 {/* REQUEST AREA */}
                     {!currentUser ? 
                     null
                     : currentUser.id !== parseInt(params.id) ? null : 
                     <Grid item xs={12} className="request-feed">
                         <Typography variant={"h4"} paragraph>Request Feed</Typography>
+                        <Tabs value={tab} onChange={handleTabChange} >
+                            <Tab label="Sent Request"  />
+                            <Tab label="Received Request"  />
+                            <Tab label="Accepted Request"  />
+                            <Tab label="Rejected Request"  />
+                        </Tabs>
+
+                        {tab === 0 ? 
                         <div className="sent-pending">
                         <Typography variant={"h5"} paragraph> Sent </Typography>
                             {playSessions.filter(session => {
@@ -407,7 +459,8 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 </Paper>
                             })
                             }
-                        </div>
+                        </div> : null}
+                        {tab === 1 ? 
                         <div className="received-pending">
                         <Typography variant={"h5"} paragraph> Received Request</Typography>
                             {playSessions.filter(session => {
@@ -429,87 +482,96 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                                 </Paper>
                             })
                             }
-                        </div>
-                        <div className="actioned-request-div">
+                        </div> : null}
+                        
+                        {/* <div className="actioned-request-div"> */}
+                        {tab === 2 ? 
+                        <div className="accepted-sent">
                         <Typography variant={"h5"} paragraph> Accepted Request </Typography>
-                            <div className="accepted-sent">
-                                {playSessions.filter(session => {
-                                    return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
-                                }).filter(session => {
-                                    return session.sender_id === currentUser.id && session.is_accepted === true && reviewed(session) === undefined
-                                }).map(session => {
-                                    return <Paper key={session.id} className={classes.border} >
-                                            <Box p={2} m={1}>
-                                                <Typography variant={"body1"}>
-                                                    <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> accepted your request to play {session.game.name} 
-                                                </Typography>
-                                                <Typography>
-                                                    {session.time ? handleTime(session.time) : "No Time ATM"}
-                                                </Typography>
-                                                    
-                                                <Typography>  
-                                                    Add on discord to start playing! - {session.receiver.discord}
-                                                </Typography>
-                                                
-                                                {/* <div className="reviewer-div">
-                                                    <ReviewForm currentUser={currentUser} user={session.receiver}/>
-                                                </div> */}
-                                                { reviewed(session) !== undefined ? null : 
-                                                <Button variant="outlined" onClick={() => handleReview(session.receiver, session.id)}>Review</Button>}
-                                                {/* <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button> */}
-                                            </Box>
-                                        </Paper>
-                                    })
-                                }
-                                {playSessions.filter(session => {
-                                    return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
-                                }).filter(session => {
-                                    return session.receiver_id === currentUser.id && session.is_accepted === true && reviewed(session) === undefined
-                                }).map(session => {
-                                    return <Paper key={session.id} className={classes.border}>
-                                            <Box p={2} m={1}>
-                                            <Typography>
-                                                You accepted to play {session.game.name} - with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> 
+                            {playSessions.filter(session => {
+                                return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                            }).filter(session => {
+                                return session.sender_id === currentUser.id && session.is_accepted === true && reviewed(session) === undefined
+                            }).map(session => {
+                                return <Paper key={session.id} className={classes.border} >
+                                        <Box p={2} m={1}>
+                                            <Typography variant={"body1"}>
+                                                <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> accepted your request to play {session.game.name} 
                                             </Typography>
                                             <Typography>
                                                 {session.time ? handleTime(session.time) : "No Time ATM"}
                                             </Typography>
-                                            <Typography >
-                                                Add on discord to start playing! - {session.sender.discord}
+                                                
+                                            <Typography>  
+                                                Add on discord to start playing! - {session.receiver.discord}
                                             </Typography>
+                                            
                                             {/* <div className="reviewer-div">
-                                                <ReviewForm currentUser={currentUser} user={session.sender}/>
+                                                <ReviewForm currentUser={currentUser} user={session.receiver}/>
                                             </div> */}
-                                            { reviewed(session) !== undefined ? null :
-                                            <Button variant="outlined" onClick={() => handleReview(session.sender, session.id)}>Review</Button>}
+                                            { reviewed(session) !== undefined ? null : 
+                                            // <Button variant="outlined" onClick={() => handleReview()}>Review</Button>
+                                            
+                                            <Button variant="outlined" onClick={() => handleReview(session.receiver, session)}>Review</Button>
+                                            }
                                             {/* <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button> */}
-                                            </Box>
-                                        </Paper>
-                                    })
-                                }
-                            </div>
-                            <Typography variant={"h5"}> Rejected Request </Typography>
-                            <div className="rejected-req">
-                                {playSessions.filter(session => {
-                                    return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
-                                }).filter(session => {
-                                    return session.sender_id === currentUser.id && session.rejected === true
-                                }).map(session => {
-                                    return <Paper key={session.id} className={classes.border}>
-                                        <Box p={2} m={1}>
-                                            <Typography>
-                                            <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> rejected your request to play {session.game.name}
-                                            </Typography>
-                                            <Typography variant={"subtitle2"}>
-                                                {handleTime(session.time)}
-                                            </Typography>
-                                            <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Delete </Button>
                                         </Box>
                                     </Paper>
                                 })
-                                }
-                            </div>
-                        </div>
+                            }
+                            {playSessions.filter(session => {
+                                return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                            }).filter(session => {
+                                return session.receiver_id === currentUser.id && session.is_accepted === true && reviewed(session) === undefined
+                            }).map(session => {
+                                return <Paper key={session.id} className={classes.border}>
+                                        <Box p={2} m={1}>
+                                        <Typography>
+                                            You accepted to play {session.game.name} - with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> 
+                                        </Typography>
+                                        <Typography>
+                                            {session.time ? handleTime(session.time) : "No Time ATM"}
+                                        </Typography>
+                                        <Typography >
+                                            Add on discord to start playing! - {session.sender.discord}
+                                        </Typography>
+                                        {/* <div className="reviewer-div">
+                                            <ReviewForm currentUser={currentUser} user={session.sender}/>
+                                        </div> */}
+                                        { reviewed(session) !== undefined ? null :
+                                        // <Button variant="outlined" onClick={() => handleOpenReview()}>Review</Button>
+                                        <Button variant="outlined" onClick={() => handleReview(session.sender, session)}>Review</Button>
+                                        }
+                                        {/* <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Remove </Button> */}
+                                        </Box>
+                                    </Paper>
+                                })
+                            }
+                        </div> : null }
+                        
+                        {tab === 3 ? 
+                        <div className="rejected-req">
+                        <Typography variant={"h5"}> Rejected Request </Typography>
+                            {playSessions.filter(session => {
+                                return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
+                            }).filter(session => {
+                                return session.sender_id === currentUser.id && session.rejected === true
+                            }).map(session => {
+                                return <Paper key={session.id} className={classes.border}>
+                                    <Box p={2} m={1}>
+                                        <Typography>
+                                        <Link to={`/users/${session.receiver.id}`}>{session.receiver.username}</Link> rejected your request to play {session.game.name}
+                                        </Typography>
+                                        <Typography variant={"subtitle2"}>
+                                            {handleTime(session.time)}
+                                        </Typography>
+                                        <Button size="small" variant={"contained"} color="secondary" onClick={() => handleDelete(session.id)} className={classes.margin}> Delete </Button>
+                                    </Box>
+                                </Paper>
+                            })
+                            }
+                        </div> : null}
+                        {/* </div> */}        
                     </Grid>}
                 </Grid>
             </Grid>
@@ -537,6 +599,23 @@ function UserShow({ currentUser, setReviewee, setSessionId, setCurrentUser }) {
                 </div>
                 </Fade>
             </Modal>
+            <Modal
+                className={classes.modal}
+                open={openReview}
+                onClose={handleCloseReview}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+                <Fade in={openReview}>
+                    <Box>
+                        <ReviewForm currentUser={currentUser} session={session} reviewee={reviewee} handleCloseReview={handleCloseReview} updateSession={updateSession}/>
+                    </Box>    
+                </Fade>
+            </Modal>
+
         </Grid>
         
     )
