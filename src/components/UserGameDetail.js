@@ -20,6 +20,9 @@ import Popover from '@material-ui/core/Popover';
 import Chip from '@material-ui/core/Chip';
 import UserGameDetailCard from './UserGameDetailCard'
 import GridList from '@material-ui/core/GridList';
+import ChatIcon from '@material-ui/icons/Chat';
+import { useGradientBtnStyles } from '@mui-treasury/styles/button/gradient';
+import { usePushingGutterStyles } from '@mui-treasury/styles/gutter/pushing';
 // import Draggable from 'react-draggable';
 
 
@@ -125,9 +128,60 @@ const useStyles = makeStyles((theme) => ({
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',
     },
+    gameBtn: {
+        background: 'linear-gradient(45deg, #2b5876 0%, #4e4376  51%, #2b5876  100%)',
+        backgroundSize: '200% auto',
+        border: 0,
+        borderRadius: 3,
+        transition: '0.5s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+        color: 'white',
+        height: 48,
+        padding: '0 45px',
+        '&:hover': {
+            transform: 'scale(1.1)',
+            backgroundPosition: 'right center',
+        },
+        borderRadius: 50,
+    },
+    chatBtn: {
+        background: 'linear-gradient(45deg, #2b5876 0%, #4e4376  51%, #2b5876  100%)',
+        backgroundSize: '200% auto',
+        border: 0,
+        borderRadius: 100,
+        transition: '0.5s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+        color: 'white',
+        height: 63,
+        // padding: '0 0px',
+        '&:hover': {
+            transform: 'scale(1.1)',
+            backgroundPosition: 'right center',
+        },
+        borderRadius: 50,
+    },
+    bannerBtn: {
+        background: 'linear-gradient(45deg, #2b5876 0%, #4e4376  51%, #2b5876  100%)',
+        backgroundSize: '200% auto',
+        border: 0,
+        marginRight: theme.spacing(1),
+        borderRadius: 100,
+        transition: '0.8s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+        color: 'white',
+        height: 63.9,
+        // padding: '0 0px',
+        '&:hover': {
+            transform: 'scale(1.1)',
+            backgroundPosition: 'right center',
+        },
+        borderRadius: 50,
+    }
 }));
 
-function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
+
+
+function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [userGame, setUserGame] = useState(null)
     const [user, setUser] = useState(null)
@@ -140,6 +194,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
     const classes = useStyles()
     const history = useHistory()
     const [anchorElEdit, setAnchorElEdit] = useState(null);
+    // const chubbyStyles = useGradientBtnStyles({ chubby: true });
 
     const handleClickEdit = (event) => {
       setAnchorElEdit(event.currentTarget);
@@ -174,7 +229,9 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
     const handleChat = (event) => {
         // console.log(user)
         setOtherUser(user)
-        handleClickChat(event)
+        const fab = document.querySelector('#fab')
+        // console.log(fab)
+        handleStartChat(fab)
     }
 
     const avgGameScore = () => {
@@ -268,6 +325,7 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                                 <Button
                                     aria-describedby={id}
                                     onClick={handleClick}
+                                    className={classes.bannerBtn}
                                     ><SportsEsportsIcon />
                                 </Button>
                                 <Typography variant={"h3"}> {userGame.game.name} </Typography>
@@ -373,11 +431,20 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                 </Box>}
             </Grid>
             <Grid item xs={3} component={"div"} className={classes.userGameDetail}>
+                <Box display="flex" justifyContent="space-between" alignContent="center" m={2}> 
+                    {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
+                    <Button onClick={handleChat} className={classes.chatBtn}>
+                        <ChatIcon />
+                    </Button>
+                    <Button className={classes.gameBtn} color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
+                        Let's Game
+                    </Button>
+                </Box>
                     <img height="100%" width="100%" className={classes.image} src={user.avatar} alt={user.username}/>
                      
-                        <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
-                            <Typography paragraph variant={"h3"}>{user.username}</Typography>
-                        </Link>
+                    <Link to={`/users/${user.id}`} style={{ textDecoration: 'none' }}>
+                        <Typography paragraph variant={"h3"}>{user.username}</Typography>
+                    </Link>
 
 
                     <Box>
@@ -418,18 +485,8 @@ function UserGameDetail({ currentUser, games, handleClickChat, setOtherUser}) {
                             </Popover>
                             
                         </div>
-                    </Box>
-                    :
-                    <div className="modal-button">
-                        {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
-                        <Button color="secondary" variant="contained" type="button" size="small" onClick={handleOpen}>
-                            Let's Game
-                        </Button>
-                        <Button onClick={handleChat}>
-                            Chat
-                        </Button>
-                    </div>
-                    }
+                    </Box> : null}
+                    
             </Grid>
             {/* SideBar */}
             <Grid item xs={false} sm={1} /> {}

@@ -43,6 +43,23 @@ const useStyles = makeStyles((theme) => ({
         height: "600px",
         width: "1500px",
         // overflow: "auto",
+    },
+    bannerBtn: {
+        background: 'linear-gradient(45deg, #2b5876 0%, #4e4376  51%, #2b5876  100%)',
+        backgroundSize: '200% auto',
+        border: 0,
+        marginRight: theme.spacing(1),
+        borderRadius: 100,
+        transition: '0.8s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+        color: 'white',
+        height: 63.9,
+        // padding: '0 0px',
+        '&:hover': {
+            transform: 'scale(1.1)',
+            backgroundPosition: 'right center',
+        },
+        borderRadius: 50,
     }
 }));
 
@@ -117,6 +134,7 @@ function GamePage({ games }) {
                                 <Button
                                 aria-describedby={id}
                                 onClick={handleClick}
+                                className={classes.bannerBtn}
                                 >
                                     <SportsEsportsIcon />
                                 </Button>

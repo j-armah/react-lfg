@@ -33,6 +33,21 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     bottom: theme.spacing(2),
     right: theme.spacing(2),
+    background: 'linear-gradient(45deg, #2b5876 0%, #4e4376  51%, #2b5876  100%)',
+    backgroundSize: '200% auto',
+    border: 0,
+    marginRight: theme.spacing(1),
+    borderRadius: 100,
+    transition: '0.8s',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+    color: 'white',
+    // height: 63.9,
+    // padding: '0 0px',
+    '&:hover': {
+        transform: 'scale(1.1)',
+        backgroundPosition: 'right center',
+    },
+    borderRadius: 50,
   },
   root: {
     position: 'fixed',
@@ -67,6 +82,10 @@ function App() {
 
   const handleClickChat = (event) => {
     setAnchorElChat(event.currentTarget);
+  };
+
+  const handleStartChat = (fab) => {
+    setAnchorElChat(fab);
   };
 
   const handleCloseChat = () => {
@@ -225,7 +244,7 @@ function App() {
 
             <Grid item xs={12} sm={12}>
               <Route exact path="/user_games/:id">
-                <UserGameDetail currentUser={currentUser} games={games} handleClickChat={handleClickChat} setOtherUser={setOtherUser}/>
+                <UserGameDetail currentUser={currentUser} games={games} handleStartChat={handleStartChat} setOtherUser={setOtherUser}/>
               </Route>
               <Route exact path="/games/:id">
                   <GamePage games={games}/>
@@ -252,12 +271,12 @@ function App() {
     {location.pathname === '/' || location.pathname === '/signup'? null :
     <div>
       {!currentUser ? null : 
-      <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleClickChat}>
+      <Fab color="primary" className={classes.fab} onClick={handleClickChat}>
         <CommentIcon />
       </Fab>}
       <Zoom in={trigger}>
         <div onClick={handleClick} role="presentation" className={classes.root}>
-          <Fab onClick={handleClick} color="secondary" size="small" aria-label="scroll back to top">
+          <Fab id="fab" onClick={handleClick} color="secondary" size="small" >
             <KeyboardArrowUpIcon />
           </Fab>
         </div>
