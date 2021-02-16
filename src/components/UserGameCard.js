@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Card from '@material-ui/core/Card'
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
@@ -10,7 +10,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 
 function UserGameCard({ userGame }) {
     const { name, image} =  userGame.game
-    const location = useLocation()
+    // const location = useLocation()
     // console.log(location.pathname === "/games")
     // console.log(userGame.game)
 

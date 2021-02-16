@@ -75,7 +75,7 @@ function ReceivedComments({ review }) {
     return (
         <>
         <Box key={review.id}>
-        <ListItem >
+        <ListItem key={review.id}>
             {/* <ListItemAvatar>
             <Avatar src={review.reviewer.avatar} />
             </ListItemAvatar> */}
@@ -88,9 +88,9 @@ function ReceivedComments({ review }) {
                             <Avatar src={review.reviewer.avatar} className={classes.large}/>
                         </Box>     
                     </CardMedia>
-                    <div className={classes.details}>
+                    <Box className={classes.details}>
                         <CardContent className={classes.content}>
-                            <Typography className={classes.section3} color="textSecondary" variant={"subtitle"}>from</Typography>
+                            <Typography className={classes.section3} color="textSecondary" variant={"subtitle1"}>from</Typography>
                             <Typography className={classes.section2} variant={"h6"}>
                                  {review.reviewer.username}
                             </Typography>
@@ -100,7 +100,7 @@ function ReceivedComments({ review }) {
                             <Typography variant={"subtitle2"} className={classes.section2} color="textSecondary">{review.game}</Typography>
                             {review.tags.map(tag => <Chip color="secondary" clickable size="small"label={tag.name} className={classes.chip}/>)}
                         </CardContent>
-                    </div>
+                    </Box>
                     
                 </Card>
             </ListItemText>

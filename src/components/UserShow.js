@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useHistory, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import EditUserInfo from './EditUserInfo'
 import ReviewForm from './ReviewForm'
 import UserGameCard from './UserGameCard'
@@ -19,7 +19,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import { format } from 'date-fns'
-import { getHours } from 'date-fns/esm'
+// import { getHours } from 'date-fns/esm'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -121,7 +121,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
 
     const params = useParams()
     const classes = useStyles()
-    const history = useHistory()
+    // const history = useHistory()
 
     const handleOpen = () => {
         setOpen(true);
@@ -334,7 +334,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
             <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
             <CircularProgress color="secondary" />
             </Box>
-      </Grid>
+        </Grid>
     )
     return (
         <Grid container spacing={2} className={classes.userShow}>

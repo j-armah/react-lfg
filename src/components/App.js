@@ -23,12 +23,12 @@ import Popover from '@material-ui/core/Popover';
 
 
 const useStyles = makeStyles((theme) => ({
-  load: {
-    display: 'flex',
-    '& > * + *': {
-      marginLeft: theme.spacing(2),
-    },
-  },
+  // load: {
+  //   display: 'flex',
+  //   '& > * + *': {
+  //     marginLeft: theme.spacing(2),
+  //   },
+  // },
   fab: {
     position: 'fixed',
     bottom: theme.spacing(2),
@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: '200% auto',
     border: 0,
     marginRight: theme.spacing(1),
-    borderRadius: 100,
     transition: '0.8s',
     boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
     color: 'white',
@@ -223,7 +222,6 @@ function App() {
     </Grid>
     
   ) 
-  debugger
   return (
     <>
     <Grid className="app" container direction="column">

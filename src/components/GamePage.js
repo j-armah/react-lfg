@@ -251,7 +251,7 @@ function GamePage({ games }) {
                         </FormControl>
                         </Box>
                     </Grid>
-                    <Grid container item xs={12} container spacing={3} >
+                    <Grid container item xs={12} spacing={3} >
                         
                         {sortedUserGames.map(userGame => 
                             <UserCard key={userGame.id} user={userGame.user} userGameId={userGame.id} userGame={userGame}/>    

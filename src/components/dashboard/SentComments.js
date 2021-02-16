@@ -77,7 +77,7 @@ function SentComments({ review, handleEdit, deleteReview }) {
     return (
         <>
         <Box key={review.id}>
-        <ListItem >
+        <ListItem key={review.id}>
             {/* <ListItemAvatar>
             <Avatar src={review.reviewer.avatar} />
             </ListItemAvatar> */}
@@ -92,7 +92,7 @@ function SentComments({ review, handleEdit, deleteReview }) {
                     </CardMedia>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            <Typography className={classes.section2} variant="subtitle" color="textSecondary">to</Typography>
+                            <Typography className={classes.section2} variant="subtitle1" color="textSecondary">to</Typography>
                             <Typography className={classes.section2} variant={"h6"}>
                                 {review.reviewee.username}
                             </Typography>

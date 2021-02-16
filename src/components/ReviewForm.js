@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Button, FormLabel, InputLabel, Input, TextField, TextareaAutosize, Typography, Box ,Card ,Divider ,Grid, Paper } from '@material-ui/core';
-import CardMedia from '@material-ui/core/CardMedia';
+import { FormControl, Button, FormLabel, TextareaAutosize, Typography, Box, Grid, Paper } from '@material-ui/core';
+// import CardMedia from '@material-ui/core/CardMedia';
 // import CardActionArea from '@material-ui/core/CardActionArea';
 // import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
@@ -60,8 +58,8 @@ function ReviewForm({ currentUser, session, reviewee, handleCloseReview, updateS
     const [contents, setContents] = useState("")
     const [rating, setRating] = useState(5)
     const [tags, setTags] = useState([])
-    const [addedTags, setAddedTags] = useState([])
-    const history = useHistory()
+    // const [addedTags, setAddedTags] = useState([])
+    // const history = useHistory()
     const classes = useStyles()
     const [state, setState] = useState({
         2: false,

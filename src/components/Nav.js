@@ -177,7 +177,7 @@ function Nav({ currentUser, handleLogout, users }) {
     <AppBar position="static" className={classes.appBar}>
         <Toolbar id="back-to-top-anchor">
         <div className="logo">
-            <img height="50px" width="110px" src="https://i.imgur.com/NoEHEH8.png" />
+            <img height="50px" width="110px" alt="logo" src="https://i.imgur.com/NoEHEH8.png" />
         </div>
         <IconButton
             edge="start"
