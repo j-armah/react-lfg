@@ -1,7 +1,7 @@
 import React , { useState } from 'react'
 // import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 // import DateTimePicker from 'react-datetime-picker'
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 // import DateFnsUtils from '@date-io/date-fns'
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -58,6 +58,7 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
             rejected: false,
             time: dateTime
         }
+        console.log(dateTime)
 
         console.log(playRequest)
 
@@ -98,8 +99,10 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
                                 type="datetime-local"
                                 // defaultValue={format(Date.now, 'YYYY-MM-DD[T]HH:mmZZ')}
                                 style={{ width: 250 }}
+                                onChange={(event) => setDateTime(event.target.value)}
                                 InputLabelProps={{
                                 shrink: true,
+                                
                                 }}
                             />
                         <Button color="secondary" variant="contained" onClick={handleSubmit} className={classes.submit}> Send Request </Button>

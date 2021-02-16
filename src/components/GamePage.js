@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import UserCard from './UserCard'
 import GameCard from './GameCard'
-import { Grid, Typography, Box, Button, Paper } from '@material-ui/core'
+import { Grid, Typography, Box, Button } from '@material-ui/core'
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import Popover from '@material-ui/core/Popover';
@@ -11,9 +11,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-
-
-
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles((theme) => ({
     gamePage: {
@@ -57,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: '200% auto',
         border: 0,
         marginRight: theme.spacing(1),
-        borderRadius: 100,
         transition: '0.8s',
         boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
         color: 'white',
@@ -68,6 +65,13 @@ const useStyles = makeStyles((theme) => ({
             backgroundPosition: 'right center',
         },
         borderRadius: 50,
+    },
+    load: {
+        height: "100vh",
+        width: "100%"
+    },
+        loadBox: {
+        width: "100%"
     }
 }));
 
@@ -86,24 +90,6 @@ const BootstrapInput = withStyles((theme) => ({
       fontSize: 16,
       padding: '10px 26px 10px 12px',
       transition: theme.transitions.create(['border-color', 'box-shadow']),
-      // Use the system font instead of the default Roboto font.
-    //   fontFamily: [
-    //     '-apple-system',
-    //     'BlinkMacSystemFont',
-    //     '"Segoe UI"',
-    //     'Roboto',
-    //     '"Helvetica Neue"',
-    //     'Arial',
-    //     'sans-serif',
-    //     '"Apple Color Emoji"',
-    //     '"Segoe UI Emoji"',
-    //     '"Segoe UI Symbol"',
-    //   ].join(','),
-    //   '&:focus': {
-    //     borderRadius: 4,
-    //     borderColor: '#80bdff',
-    //     boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    //   },
     },
   }))(InputBase);
 
@@ -147,7 +133,7 @@ function GamePage({ games }) {
             .then(resp => resp.json())
             .then(data => {
                 const filteredUserGames = data.filter(ug => ug.game_id === parseInt(params.id)).filter(ug => ug.user.lfg === true)
-                setUserGames(filteredUserGames)    
+                setUserGames(filteredUserGames)
             })
     }, [params.id])
 
@@ -169,9 +155,15 @@ function GamePage({ games }) {
             console.log(sortedUserGames)
         }
     }
-    
 
-    if (!isLoaded) return <h2>Loading...</h2>
+
+    if (!isLoaded) return (
+        <Grid container className={classes.load}>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
+                <CircularProgress color="secondary" />
+            </Box>
+        </Grid>
+    )
     return (
 
         <Grid container item className={classes.gamePage} xs={"auto"}>
@@ -262,7 +254,7 @@ function GamePage({ games }) {
                     <Grid container item xs={12} container spacing={3} >
                         
                         {sortedUserGames.map(userGame => 
-                            <UserCard key={userGame.id} user={userGame.user} userGameId={userGame.id}/>    
+                            <UserCard key={userGame.id} user={userGame.user} userGameId={userGame.id} userGame={userGame}/>    
                         )}
                     </Grid>
                 </Grid>

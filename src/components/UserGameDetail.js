@@ -4,7 +4,7 @@ import { useParams, Link, useHistory } from 'react-router-dom';
 import PlaySessionForm from './PlaySessionForm';
 import EditUserGameDetail from './EditUserGameDetail';
 import GameCard from './GameCard'
-import UserGameCard from './UserGameCard'
+// import UserGameCard from './UserGameCard'
 import { Grid, Typography, Button, Box, Divider, Card } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,8 +21,9 @@ import Chip from '@material-ui/core/Chip';
 import UserGameDetailCard from './UserGameDetailCard'
 import GridList from '@material-ui/core/GridList';
 import ChatIcon from '@material-ui/icons/Chat';
-import { useGradientBtnStyles } from '@mui-treasury/styles/button/gradient';
-import { usePushingGutterStyles } from '@mui-treasury/styles/gutter/pushing';
+import CircularProgress from '@material-ui/core/CircularProgress';
+// import { useGradientBtnStyles } from '@mui-treasury/styles/button/gradient';
+// import { usePushingGutterStyles } from '@mui-treasury/styles/gutter/pushing';
 // import Draggable from 'react-draggable';
 
 
@@ -176,6 +177,13 @@ const useStyles = makeStyles((theme) => ({
             backgroundPosition: 'right center',
         },
         borderRadius: 50,
+    },
+    load: {
+        height: "100vh",
+        width: "100%"
+    },
+        loadBox: {
+        width: "100%"
     }
 }));
 
@@ -236,8 +244,6 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
 
     const avgGameScore = () => {
         const avg = userGameReviews.reduce((sum, review) => sum + review.rating, 0) / userGameReviews.length
-
-        
        return userGameReviews.length > 0 ?  avg.toFixed(1) :  "0"
     }
 
@@ -294,7 +300,13 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
     }, [params.id])
 
     // console.log(userGameReviews)
-    if (!isLoaded) return <h2>Loading...</h2>
+    if (!isLoaded) return (
+        <Grid container className={classes.load}>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
+                <CircularProgress color="secondary" />
+            </Box>
+        </Grid>
+    )
     return (
         <Grid container spacing={4} className={classes.userGamePage} component={"div"}>
             <Grid 
@@ -432,11 +444,16 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
             </Grid>
             <Grid item xs={3} component={"div"} className={classes.userGameDetail}>
                 {!currentUser ? 
-                null  
+                <Box display="flex" justifyContent="space-between" alignContent="center" m={2}>                 
+                    <Button onClick={handleChat} disabled className={classes.chatBtn}>
+                        <ChatIcon />
+                    </Button>
+                    <Button className={classes.gameBtn} color="secondary" variant="contained" type="button" size="small" disabled onClick={handleOpen}>
+                        Login to Request
+                    </Button>
+                </Box>     
                 : currentUser.id === userGame.user.id ? 
-                <Box display="flex" justifyContent="space-between" alignContent="center" m={2}> 
-                {/* Needs to be logged in to open this modal , or needs to open login modal if clicked on */}
-                
+                <Box display="flex" justifyContent="space-between" alignContent="center" m={2}>                 
                     <Button onClick={handleChat} disabled className={classes.chatBtn}>
                         <ChatIcon />
                     </Button>

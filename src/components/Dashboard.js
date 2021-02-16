@@ -11,6 +11,7 @@ import EditReview from './dashboard/EditReview';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 
 
@@ -19,6 +20,13 @@ import Backdrop from '@material-ui/core/Backdrop';
 const useStyles = makeStyles((theme) => ({
     comments: {
         marginRight: theme.spacing(4),
+    },
+    load: {
+        height: "100vh",
+        width: "100%"
+    },
+        loadBox: {
+        width: "100%"
     }
 }))
 
@@ -100,7 +108,13 @@ function Dashboard({ currentUser }) {
    
 
     // console.log(currentUser.reviews_as_reviewee)
-    if (!isLoaded) return <h1>Loading...</h1>
+    if (!isLoaded) return (
+        <Grid container className={classes.load}>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
+                <CircularProgress color="secondary" />
+            </Box>
+        </Grid>
+    )
     return (
         <>
         <Grid container >

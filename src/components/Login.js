@@ -14,6 +14,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 function Copyright() {
   return (
@@ -57,6 +59,13 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  load: {
+    height: "100vh",
+    width: "100%"
+  },
+    loadBox: {
+    width: "100%"
+  }
 }))
 
 function Login({ firstGame, handleLogin }) {
@@ -92,9 +101,15 @@ function Login({ firstGame, handleLogin }) {
           });
     }
 
-    console.log(firstGame)
+    // console.log(firstGame)
 
-    if (!firstGame) return <h1>Loading...</h1>
+    if (!firstGame) return (
+      <Grid container className={classes.load}>
+        <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
+          <CircularProgress color="secondary" />
+        </Box>
+    </Grid>
+    )
     return (
       <Grid container component="main" className={classes.root}>
       <CssBaseline />

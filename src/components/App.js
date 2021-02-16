@@ -59,6 +59,13 @@ const useStyles = makeStyles((theme) => ({
     height: '600px',
     overflow: 'hidden',
     color: "",
+  },
+  load: {
+    height: "100vh",
+    width: "100%"
+  },
+  loadBox: {
+    width: "100%"
   }
 }));
 
@@ -209,10 +216,14 @@ function App() {
 
   // if (!isLoaded) return <h1>Loading</h1>
   if (!isLoaded) return (
-    <Box position="relative" display="inline-flex" justifyContent="center" alignItems="center">
-      <CircularProgress color="secondary" />
-    </Box>
+    <Grid container className={classes.load}>
+      <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
+        <CircularProgress color="secondary" />
+      </Box>
+    </Grid>
+    
   ) 
+  debugger
   return (
     <>
     <Grid className="app" container direction="column">

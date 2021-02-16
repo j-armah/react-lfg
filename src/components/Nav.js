@@ -3,12 +3,12 @@ import { useLocation, useHistory } from 'react-router-dom'
 import { Button, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import InputBase from '@material-ui/core/InputBase';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+// import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Nav({ currentUser, handleLogout, users }) {
-    const [search, setSearch] = useState("")
+    // const [search, setSearch] = useState("")
     const [anchorEl, setAnchorEl] = useState(null)
     const history = useHistory()
     const classes = useStyles()
@@ -284,18 +284,16 @@ function Nav({ currentUser, handleLogout, users }) {
             </IconButton> */}
             {!currentUser ? 
             <div>
-                <Button onClick={() => history.push('/')}variant="outlined" color="inherit" className={classes.login}>Login</Button>
-                <Button color="secondary" variant="contained">Signup</Button>
+                <Button onClick={() => history.push('/')} variant="outlined" color="inherit" className={classes.login}>Login</Button>
+                <Button onClick={() => history.push('/signup')} color="secondary" variant="contained">Signup</Button>
             </div>
-            
             :
-        
             <IconButton
                 edge="end"
                 onClick={handleProfileMenuOpen}
                 color="inherit"
             >
-                <Avatar src={currentUser.avatar} className={classes.large}/>
+                <Avatar src={currentUser.avatar} className={classes.large} alt={currentUser.username}/>
             </IconButton>
             }
         </div>

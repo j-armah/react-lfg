@@ -19,8 +19,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import { format } from 'date-fns'
+import { getHours } from 'date-fns/esm'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 
 
@@ -92,6 +95,13 @@ const useStyles = makeStyles((theme) => ({
     chip: {
         margin: theme.spacing(0.5),
     },
+    load: {
+        height: "100vh",
+        width: "100%"
+    },
+        loadBox: {
+        width: "100%"
+    }
   }));
 //   , setReviewee 
 function UserShow({ currentUser, setSessionId, setCurrentUser}) {
@@ -254,7 +264,11 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
         // // console.log(calendar)
         // // console.log(event.toLocaleDateString(undefined, options))
         // return event.toLocaleDateString(undefined, options)
-        const date = new Date(time)
+        // const date = new Date(time)
+        // return format(date, "EEEE, MM/dd/yyyy h:mm aa")
+
+        let date = new Date(time)
+        date = new Date(date.setHours(date.getHours() + 5))
         return format(date, "EEEE, MM/dd/yyyy h:mm aa")
     }
 
@@ -315,8 +329,13 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
     }
 
 
-    if (!isLoaded) return <h2>Loading...</h2>
-    
+    if (!isLoaded) return (
+        <Grid container className={classes.load}>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.loadBox}>
+            <CircularProgress color="secondary" />
+            </Box>
+      </Grid>
+    )
     return (
         <Grid container spacing={2} className={classes.userShow}>
             {/* SideBar */}
