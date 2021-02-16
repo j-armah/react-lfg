@@ -3,9 +3,17 @@ import { useParams } from 'react-router-dom'
 import UserCard from './UserCard'
 import GameCard from './GameCard'
 import { Grid, Typography, Box, Button, Paper } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import Popover from '@material-ui/core/Popover';
+import InputBase from '@material-ui/core/InputBase';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     gamePage: {
@@ -63,13 +71,52 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const BootstrapInput = withStyles((theme) => ({
+    root: {
+      'label + &': {
+        marginTop: theme.spacing(2),
+      },
+    },
+    input: {
+      borderRadius: 26,
+      position: 'relative',
+      backgroundColor: theme.palette.background.paper,
+      opacity: 0.6,
+    //   border: '1px solid #ced4da',
+      fontSize: 16,
+      padding: '10px 26px 10px 12px',
+      transition: theme.transitions.create(['border-color', 'box-shadow']),
+      // Use the system font instead of the default Roboto font.
+    //   fontFamily: [
+    //     '-apple-system',
+    //     'BlinkMacSystemFont',
+    //     '"Segoe UI"',
+    //     'Roboto',
+    //     '"Helvetica Neue"',
+    //     'Arial',
+    //     'sans-serif',
+    //     '"Apple Color Emoji"',
+    //     '"Segoe UI Emoji"',
+    //     '"Segoe UI Symbol"',
+    //   ].join(','),
+    //   '&:focus': {
+    //     borderRadius: 4,
+    //     borderColor: '#80bdff',
+    //     boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    //   },
+    },
+  }))(InputBase);
+
 function GamePage({ games }) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [game, setGame] = useState(null)
     const [userGames, setUserGames] = useState([])
+    const [sort, setSort] = useState("recommended")
     const [anchorEl, setAnchorEl] = useState(null)
     const params = useParams()
     const classes = useStyles()
+
+    let sortedUserGames = [...userGames]
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -78,6 +125,10 @@ function GamePage({ games }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleChange = (event) => {
+        setSort(event.target.value)
+    }
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -99,6 +150,26 @@ function GamePage({ games }) {
                 setUserGames(filteredUserGames)    
             })
     }, [params.id])
+
+    if (sort !== "general") {
+        if (sort === "recommended") {
+            let userGamesCopy = [...userGames]
+            sortedUserGames = userGamesCopy.sort((ugA, ugB) => {
+                return ugB.user.recommends - ugA.user.recommends
+            })
+
+            console.log(sortedUserGames)
+        }
+        if (sort === "rating") {
+            let userGamesCopy = [...userGames]
+            sortedUserGames = userGamesCopy.sort((ugA, ugB) => {
+                return ugB.user.avg - ugA.user.avg
+            })
+
+            console.log(sortedUserGames)
+        }
+    }
+    
 
     if (!isLoaded) return <h2>Loading...</h2>
     return (
@@ -169,11 +240,31 @@ function GamePage({ games }) {
                 
             </Grid>
             <Grid item xs={false} sm={1} />
-                <Grid container item xs={10} container spacing={3} className={classes.users}>
-                    
-                    {userGames.map(userGame => 
-                        <UserCard key={userGame.id} user={userGame.user} userGameId={userGame.id}/>    
-                    )}
+                <Grid container item xs={10} className={classes.users}>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="flex-end" mr={3} mb={1}>
+                        <FormControl className={classes.margin}>
+                            <InputLabel id="sort-users">Sort</InputLabel>
+                            <Select
+                            labelId="sort-users"
+                            id="sort-select"
+                            value={sort}
+                            onChange={handleChange}
+                            input={<BootstrapInput />}
+                            >
+                            <MenuItem value={"recommended"}>Recommended</MenuItem>
+                            <MenuItem value={"rating"}>Rating</MenuItem>
+                            <MenuItem value={"general"}>General</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </Box>
+                    </Grid>
+                    <Grid container item xs={12} container spacing={3} >
+                        
+                        {sortedUserGames.map(userGame => 
+                            <UserCard key={userGame.id} user={userGame.user} userGameId={userGame.id}/>    
+                        )}
+                    </Grid>
                 </Grid>
             <Grid item xs={false} sm={1} />
             

@@ -103,7 +103,7 @@ function Nav({ currentUser, handleLogout, users }) {
 
     //  test 
     const [value, setValue] = useState(null);
-    const [inputValue, setInputValue] = React.useState('');
+    const [inputValue, setInputValue] = useState('');
 
     const handleProfileMenuOpen = (event) => {
         // console.log(event.currentTarget)
@@ -138,10 +138,10 @@ function Nav({ currentUser, handleLogout, users }) {
     const renderMenu = (
         <Menu
             anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             id={menuId}
             keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
@@ -289,18 +289,15 @@ function Nav({ currentUser, handleLogout, users }) {
             </div>
             
             :
-            <div>
+        
             <IconButton
                 edge="end"
-                aria-label={"current user"}
-                aria-controls={menuId}
-                aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
                 color="inherit"
             >
                 <Avatar src={currentUser.avatar} className={classes.large}/>
             </IconButton>
-            </div>}
+            }
         </div>
         </Toolbar>
     </AppBar>
