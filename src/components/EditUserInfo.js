@@ -24,8 +24,17 @@ function EditUserInfo({ user, setUser, setOpen, setCurrentUser }) {
     const [avatar, setAvatar] = useState(user.avatar)
     const [bio, setBio] = useState(user.bio)
     const [discord, setDiscord] = useState(user.discord)
+
     const classes = useStyles()
     
+    console.log(avatar)
+
+    // const handleAvatarChange = (e) => {
+    //     e.persist()
+    //     setAvatar(
+    //         e.target.files[0]
+    //     )
+    // }
 
     function handleSubmit(event) {
         event.preventDefault()
@@ -37,14 +46,25 @@ function EditUserInfo({ user, setUser, setOpen, setCurrentUser }) {
             bio: bio,
             discord: discord
         }
+
+        // const form = new FormData()
+        // form.append('username', username)
+        // form.append('name', name)
+        // form.append('bio', bio)
+        // form.append('discord', discord)
+        // form.append('avatar', avatar)
+
+        // console.log(form)
         
-        console.log(newUserInfo)
+        // console.log(newUserInfo)
         fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${user.id}`, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(newUserInfo)
+            body:
+            JSON.stringify(newUserInfo)
+            //form
         })
         .then(resp => resp.json())
         .then(newUserObj => {
@@ -72,6 +92,7 @@ function EditUserInfo({ user, setUser, setOpen, setCurrentUser }) {
                     alt={username}
                 />
 
+
                 <TextField
                     label="URL" 
                     variant="outlined"
@@ -83,6 +104,7 @@ function EditUserInfo({ user, setUser, setOpen, setCurrentUser }) {
                     value={avatar}
                     onChange={(e) => setAvatar(e.target.value)}
                 />
+                {/* <input type="file" name="image" onChange={handleAvatarChange}/> */}
 
                 <FormLabel className={classes.label} htmlFor="name">Edit Name</FormLabel>
                 <TextField 

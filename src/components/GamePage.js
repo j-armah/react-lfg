@@ -154,6 +154,8 @@ function GamePage({ games }) {
 
             console.log(sortedUserGames)
         }
+    } else {
+        sortedUserGames = [...userGames]
     }
 
 
@@ -221,6 +223,12 @@ function GamePage({ games }) {
                                         <Typography variant={"h3"} paragraph> Recommended Games </Typography>
                                             <Grid container spacing={4}>
                                                 {games.slice(0,9).map(game => <GameCard key={game.id} game={game} handleClose={handleClose}/> )} 
+                                            </Grid>
+                                            <Box m={2}>
+                                                <Typography variant={"h4"}> All Games </Typography>
+                                            </Box>
+                                            <Grid container spacing={4}>
+                                                {games.slice(9).map(game => <GameCard key={game.id} game={game} handleClose={handleClose}/> )} 
                                             </Grid>
                                         {/* </Paper> */}
                                     </Box>

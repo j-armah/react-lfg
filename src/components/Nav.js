@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Nav({ currentUser, handleLogout, users }) {
+function Nav({ currentUser, handleLogout, users, lastGame }) {
     // const [search, setSearch] = useState("")
     const [anchorEl, setAnchorEl] = useState(null)
     const history = useHistory()
@@ -134,7 +134,7 @@ function Nav({ currentUser, handleLogout, users }) {
         setAnchorEl(null);
     };
 
-    const menuId = 'primary-search-account-menu';
+    const menuId = 'account-menu';
     const renderMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -185,10 +185,13 @@ function Nav({ currentUser, handleLogout, users }) {
             color="inherit"
             aria-label="open drawer"
         >
-            <MenuIcon />
+            {/* <MenuIcon /> */}
         </IconButton>
         <Button className={classes.title} onClick={() => history.push("/games")}>
             All Games
+        </Button>
+        <Button className={classes.title} onClick={() => history.push(lastGame)}>
+            LFG
         </Button>
         
         

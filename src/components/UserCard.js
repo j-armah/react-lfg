@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     },
     loadBox: {
         width: "100%"
+    },
+    box: {
+        borderRadius: 10,
+        height: "102%",
     }
   }));
 
@@ -44,7 +48,7 @@ function UserCard({ user, userGameId, userGame }) {
                 setUserGameReviews(reviews)
                 setIsLoaded(true)
             })
-    })
+    }, [])
     
 
     
@@ -69,7 +73,7 @@ function UserCard({ user, userGameId, userGame }) {
     )
     return (
         <Grid item xs={3}>
-            <Card className="card">
+            <Card className={classes.box}>
                 <CardActionArea>
                     <Link to={`/user_games/${userGameId}`}>
                         <CardMedia 

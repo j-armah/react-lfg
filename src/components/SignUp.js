@@ -121,9 +121,11 @@ function SignUp({ firstGame, handleSignUp }) {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+          <img height="80px" src='https://i.imgur.com/NoEHEH8.png' alt="lfg-logo"/>
+
+          {/* <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
-          </Avatar>
+          </Avatar> */}
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>

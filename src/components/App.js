@@ -78,13 +78,24 @@ function App() {
   const [reviewee, setReviewee] = useState(null)
   const [sessionId, setSessionId] = useState(null)
   const [otherUser, setOtherUser] = useState(null)
-
+  const [lastGame, setLastGame] = useState(null)
   const [anchorElChat, setAnchorElChat] = useState(null)
+  
 
   const history = useHistory()
   const location = useLocation()
   // const params = useParams()
   const classes = useStyles()
+
+  // console.log(location.pathname.split('/games/'))
+
+  useEffect(() => {
+    if (location.pathname.includes('/games/')) {
+      setLastGame(location.pathname)
+      console.log(lastGame)
+    }
+  }, [location.pathname])
+  
 
   const handleClickChat = (event) => {
     setAnchorElChat(event.currentTarget);
@@ -228,7 +239,7 @@ function App() {
 
       <Grid item>
         <Route>
-          <Nav currentUser={currentUser} handleLogout={handleLogout} games={games} users={users}/>
+          <Nav currentUser={currentUser} handleLogout={handleLogout} games={games} users={users} lastGame={lastGame}/>
         </Route> 
       </Grid>
 

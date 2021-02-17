@@ -328,6 +328,20 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
         return array
     }
 
+    const sortGames = () => {
+        const sortedUserGames = user.games.sort((gameA, gameB) => {
+            if (gameA.user_games.length > gameB.user_games.length) {
+                return -1
+            }
+            if (gameA.user_games.length < gameB.user_games.length) {
+                return 1
+            } 
+            return 0
+        })
+
+        console.log(sortedUserGames)
+    }
+
 
     if (!isLoaded) return (
         <Grid container className={classes.load}>
@@ -546,7 +560,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
                                 return <Paper key={session.id} className={classes.border}>
                                         <Box p={2} m={1}>
                                         <Typography>
-                                            You accepted to play {session.game.name} - with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> 
+                                            You accepted a request to play {session.game.name} with <Link to={`/users/${session.sender.id}`}>{session.sender.username}</Link> 
                                         </Typography>
                                         <Typography>
                                             {session.time ? handleTime(session.time) : "No Time ATM"}

@@ -181,6 +181,15 @@ const useStyles = makeStyles((theme) => ({
     },
         loadBox: {
         width: "100%"
+    },
+    paperBanner: {
+        background: 'linear-gradient(90deg,rgba(43, 88, 118, .35), rgba(78, 67, 118, .2))',
+        backgroundSize: '200% auto',
+        borderRadius: 10,
+        height: theme.spacing(14),
+    },
+    bannerGrid: {
+        height: "100%",
     }
 }));
 
@@ -195,6 +204,7 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
     const [anchorEl, setAnchorEl] = useState(null)
     const [showMore, setShowMore] = useState(3)
     const [userGameReviews, setUserGameReviews] = useState([])
+    const [recommends, setRecommends] = useState(0)
     const params = useParams()
     const classes = useStyles()
     const history = useHistory()
@@ -290,6 +300,8 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
                         // console.log(userObj)
                         setUser(userObj)
                         const reviews = userObj.reviews_as_reviewee.filter(review => review.game === data.game.name)
+                        const recommended = reviews.filter(review => review.rating >= 4).length
+                        setRecommends(recommended)
                         setUserGameReviews(reviews)
                         setIsLoaded(true)
                     })
@@ -337,7 +349,7 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
                                     className={classes.bannerBtn}
                                     ><SportsEsportsIcon />
                                 </Button>
-                                <Typography variant={"h3"}> {userGame.game.name} </Typography>
+                                <Typography variant={"h3"} onClick={() => history.push(`/games/${userGame.game.id}`)}> {userGame.game.name} </Typography>
                                 <Popover
                                     id={id}
                                     open={openPop}
@@ -369,6 +381,28 @@ function UserGameDetail({ currentUser, games, handleStartChat, setOtherUser}) {
             {/* SideBar */}
             <Grid item xs={false} sm={1} />
             <Grid item xs={7} container spacing={2} className={classes.userGameDetail}>
+                <Grid container item xs={12} direction="column">
+                    <Paper className={classes.paperBanner}>
+                        <Box display="flex" alignItems="center" className={classes.bannerGrid}>
+                        <Grid item xs={4} >
+                            <Box ml={2}>
+                                <Typography paragraph variant={"subtitle2"}>Review Score: </Typography>
+                                <Box display="flex" >
+                                    <Box fontWeight="fontWeightBold" fontSize={26}>{avgGameScore()}</Box><Box fontSize={24}>/ 5.0</Box> <Rating precision={0.1} value={parseFloat(avgGameScore())} size="large" readOnly />
+                                </Box>  
+                            </Box>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Typography paragraph variant={"subtitle2"}>Sessions </Typography>
+                            <Box fontWeight="fontWeightBold" fontSize={26}> {userGameReviews.length} </Box>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Typography paragraph variant={"subtitle2"}>Recommended </Typography>
+                            <Box fontWeight="fontWeightBold" fontSize={26}> {recommends} </Box>
+                        </Grid>
+                        </Box>
+                    </Paper>
+                </Grid>
                 <Grid item xs={12} >
                     <div className="user-game-img-div">
                         <img height="100%" width="100%" className={classes.image} src={userGame.image} alt="placeholder" />

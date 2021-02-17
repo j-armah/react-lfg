@@ -27,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
     },
         loadBox: {
         width: "100%"
+    },
+    modal: {
+        marginTop: theme.spacing(20),
+        marginBottom: theme.spacing(20),
+        marginRight: theme.spacing(60),
+        marginLeft: theme.spacing(60),
     }
 }))
 
