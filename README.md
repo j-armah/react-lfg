@@ -7,9 +7,9 @@ LFG or looking for game is an application that allows users to connect with each
 
 ## Technologies Used
 
-React (Frontend)
-Ruby on Rails (Backend API)
-Material UI 
-TalkJs
-date-fns
+- React (Frontend)
+- Ruby on Rails (Backend API)
+- Material UI 
+- TalkJs
+- date-fns
 
