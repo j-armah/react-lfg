@@ -45,7 +45,7 @@ function Dashboard({ currentUser }) {
     const [user, setUser] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
     // const [requestTab, setRequestTab] = React.useState(0);
-    console.log(currentUser)
+    // console.log(currentUser)
     
     // useEffect(() => {
     //     const sentReviews = currentUser.reviews_as_reviewer.map(review => <SentComments key={review.id} review={review}/>)

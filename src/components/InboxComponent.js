@@ -16,7 +16,7 @@ const InboxComponent = ({ user, otherUser }) => {
                 id: currentUser.id,
                 name: currentUser.username,
                 photoUrl: currentUser.avatar,
-                welcomeMessage: "Hey there! How are you? :-)"
+                // welcomeMessage: "Hey there! How are you? :-)"
             });
 
             const session = new Talk.Session({

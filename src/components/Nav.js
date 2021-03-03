@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
-import { Button, AppBar, Toolbar, Typography } from '@material-ui/core'
+import { Button, AppBar, Toolbar } from '@material-ui/core'
 import { makeStyles, fade } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
 // import InputBase from '@material-ui/core/InputBase';
 // import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 // import SearchIcon from '@material-ui/icons/Search';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Nav({ currentUser, handleLogout, users, lastGame }) {
+function Nav({ currentUser, handleLogout, users, lastGame, game }) {
     // const [search, setSearch] = useState("")
     const [anchorEl, setAnchorEl] = useState(null)
     const history = useHistory()
@@ -168,7 +168,7 @@ function Nav({ currentUser, handleLogout, users, lastGame }) {
         
     }
     
-    // console.log(search)
+    // console.log(game)
     
     if (location.pathname === "/" || location.pathname === "/signup") return null
     return (
@@ -190,7 +190,7 @@ function Nav({ currentUser, handleLogout, users, lastGame }) {
         <Button className={classes.title} onClick={() => history.push("/games")}>
             All Games
         </Button>
-        <Button className={classes.title} onClick={() => history.push(lastGame)}>
+        <Button className={classes.title} onClick={() => history.push(!lastGame ? `/games/${game.id}` : lastGame)}>
             LFG
         </Button>
         

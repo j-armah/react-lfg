@@ -323,24 +323,24 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
             array.push({[prop]: hash[prop]})
         }
 
-        console.log(hash)
-        console.log(array)
+        // console.log(hash)
+        // console.log(array)
         return array
     }
 
-    const sortGames = () => {
-        const sortedUserGames = user.games.sort((gameA, gameB) => {
-            if (gameA.user_games.length > gameB.user_games.length) {
-                return -1
-            }
-            if (gameA.user_games.length < gameB.user_games.length) {
-                return 1
-            } 
-            return 0
-        })
+    // const sortGames = () => {
+    //     const sortedUserGames = user.games.sort((gameA, gameB) => {
+    //         if (gameA.user_games.length > gameB.user_games.length) {
+    //             return -1
+    //         }
+    //         if (gameA.user_games.length < gameB.user_games.length) {
+    //             return 1
+    //         } 
+    //         return 0
+    //     })
 
-        console.log(sortedUserGames)
-    }
+    //     console.log(sortedUserGames)
+    // }
 
 
     if (!isLoaded) return (
@@ -473,7 +473,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
 
                         {tab === 0 ? 
                         <div className="sent-pending">
-                        <Typography variant={"h5"} paragraph> Sent </Typography>
+                        {/* <Typography variant={"h5"} paragraph> Sent </Typography> */}
                             {playSessions.filter(session => {
                                 return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                             }).filter(session => {
@@ -495,7 +495,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
                         </div> : null}
                         {tab === 1 ? 
                         <div className="received-pending">
-                        <Typography variant={"h5"} paragraph> Received Request</Typography>
+                        {/* <Typography variant={"h5"} paragraph> Received Request</Typography> */}
                             {playSessions.filter(session => {
                                 return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                             }).filter(session => {
@@ -520,7 +520,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
                         {/* <div className="actioned-request-div"> */}
                         {tab === 2 ? 
                         <div className="accepted-sent">
-                        <Typography variant={"h5"} paragraph> Accepted Request </Typography>
+                        {/* <Typography variant={"h5"} paragraph> Accepted Request </Typography> */}
                             {playSessions.filter(session => {
                                 return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                             }).filter(session => {
@@ -584,7 +584,7 @@ function UserShow({ currentUser, setSessionId, setCurrentUser}) {
                         
                         {tab === 3 ? 
                         <div className="rejected-req">
-                        <Typography variant={"h5"}> Rejected Request </Typography>
+                        {/* <Typography variant={"h5"}> Rejected Request </Typography> */}
                             {playSessions.filter(session => {
                                 return session.sender_id === currentUser.id || session.receiver_id === currentUser.id 
                             }).filter(session => {

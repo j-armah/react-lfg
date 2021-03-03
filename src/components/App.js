@@ -92,7 +92,7 @@ function App() {
   useEffect(() => {
     if (location.pathname.includes('/games/')) {
       setLastGame(location.pathname)
-      console.log(lastGame)
+      // console.log(lastGame)
     }
   }, [location.pathname])
   
@@ -158,6 +158,7 @@ function App() {
   function handleSignUp(user) {
     console.log(user)
     setCurrentUser(user)
+    setUsers([...users, user])
     history.push("/games")
   }
 
@@ -239,7 +240,7 @@ function App() {
 
       <Grid item>
         <Route>
-          <Nav currentUser={currentUser} handleLogout={handleLogout} games={games} users={users} lastGame={lastGame}/>
+          <Nav currentUser={currentUser} handleLogout={handleLogout} games={games} users={users} lastGame={lastGame} game={games[0]}/>
         </Route> 
       </Grid>
 

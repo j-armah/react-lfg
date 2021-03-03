@@ -144,7 +144,7 @@ function GamePage({ games }) {
                 return ugB.user.recommends - ugA.user.recommends
             })
 
-            console.log(sortedUserGames)
+            // console.log(sortedUserGames)
         }
         if (sort === "rating") {
             let userGamesCopy = [...userGames]
@@ -152,7 +152,7 @@ function GamePage({ games }) {
                 return ugB.user.avg - ugA.user.avg
             })
 
-            console.log(sortedUserGames)
+            // console.log(sortedUserGames)
         }
     } else {
         sortedUserGames = [...userGames]

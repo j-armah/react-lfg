@@ -115,21 +115,3 @@ function PlaySessionForm({ currentUser, userGame, setOpen}) {
 }
 
 export default PlaySessionForm
-
-
-{/* 
-                <DateTimePicker
-                    onChange={setDateTime}
-                    value={dateTime}
-
-                /> */
-                /* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DateTimePicker
-                        renderInput={(props) => <TextField {...props} />}
-                        label="DateTimePicker"
-                        value={value}
-                        onChange={(newValue) => {
-                        setValue(newValue);
-                        }}
-                    />
-                    </LocalizationProvider> */}
