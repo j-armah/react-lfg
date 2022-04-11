@@ -13,3 +13,6 @@ LFG or looking for game is an application that allows users to connect with each
 - TalkJs
 - date-fns
 
+https://lfg-beta.netlify.app/
+Test user: jcodes
+Password: 123
